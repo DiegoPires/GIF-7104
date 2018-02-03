@@ -10,6 +10,7 @@ void executeSequential(int argc, char **argv);
 void executeParallel(int argc, char **argv);
 void executeParallel2(int argc, char **argv);
 void executeParallel3(int argc, char **argv);
+void executeParallel4(int argc, char **argv);
 void showResults(long iMax, char* iFlags);
 
 // global variables
@@ -17,11 +18,15 @@ char *flagsParallel;
 char *flagsParallel2;
 char *flagsParallel3;
 
+char *flagsParallel4;
+pthread_mutex_t lock_x;
+
+
 int maxValue = 1000;
 
 // structures de données
 struct ThreadInput{
-    long begin, end, wheelFactor;
+    long id, begin, end, wheelFactor;
 };
 
 // Programme qui trouve à l'aide du Crible d'Ératosthène,
@@ -33,6 +38,7 @@ int main(int argc, char *argv[]) {
     executeParallel(argc, argv);
     executeParallel2(argc, argv);
     executeParallel3(argc, argv);
+    executeParallel4(argc, argv);
 
     return 0;
 }
@@ -88,6 +94,29 @@ void* executeEratosthene3(void* iArgs) {
             // invalider tous les multiples
             for (unsigned long i=begin; i*p < maxValue; i++) {
                 flagsParallel3[i*p]++;
+            }
+        }
+    }
+
+    pthread_exit(NULL);
+}
+
+void* executeEratosthene4(void* iArgs) {
+
+    struct ThreadInput *lThreadInput = (struct ThreadInput*)iArgs;
+
+    unsigned int begin = (*lThreadInput).begin;
+    unsigned int end = (*lThreadInput).end;
+
+    if (begin == 1) begin = 2;
+
+    for (unsigned long p=begin; p < maxValue; p++) {
+        if (flagsParallel4[p] == 0) {
+            // invalider tous les multiples
+            for (unsigned long i=begin; i*p < maxValue; i++) {
+                pthread_mutex_lock(&lock_x);
+                flagsParallel4[i*p]++;
+                pthread_mutex_unlock(&lock_x);
             }
         }
     }
@@ -265,6 +294,51 @@ void executeParallel3(int argc, char *argv[]) {
     showResults(maxValue, flagsParallel3);
 
     printf("\nTemps d'execution parallèle 3  = %f sec\n", lChrono.get());
+}
+
+void executeParallel4(int argc, char *argv[]) {
+
+    int lThreadCount = 1;
+    long lItemPourThread;
+
+    if (argc > 1) maxValue = atoi(argv[1]);
+    if (argc > 2) lThreadCount = atoi(argv[2]);
+
+    lItemPourThread = maxValue / lThreadCount;
+
+    struct ThreadInput *lInput = nullptr;
+
+    // Démarrer le chronomètre
+    Chrono lChrono(true);
+
+    flagsParallel4 = (char*) calloc(maxValue, sizeof(*flagsParallel4));
+    assert(flagsParallel4 != 0);
+
+    // declaration des threads
+    pthread_t eThread[lThreadCount];
+
+    // creation des threads
+    for(int i=0; i < lThreadCount; i++) {
+
+        lInput = (struct ThreadInput*)malloc(sizeof *lInput);
+        lInput->begin = i * lItemPourThread + 1 ;
+        lInput->end = (i + 1) * lItemPourThread ;
+        lInput->wheelFactor = lItemPourThread ;
+
+        pthread_create(&eThread[i], NULL, executeEratosthene4, lInput);
+    }
+
+    // attends jusqu'a que les threads s'executent
+    for(int i=0; i < lThreadCount; i++){
+        pthread_join(eThread[i], NULL);
+    }
+
+    lChrono.pause();
+
+    // Afficher les nombres trouvés à la console
+    showResults(maxValue, flagsParallel4);
+
+    printf("\nTemps d'execution parallèle 4  = %f sec\n", lChrono.get());
 }
 
 void executeSequential(int argc, char *argv[]) {
