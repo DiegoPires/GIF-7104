@@ -26,17 +26,14 @@
       <file leaf-file-name="premiers.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/premiers.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="547">
-              <caret line="255" column="37" lean-forward="false" selection-start-line="255" selection-start-column="37" selection-end-line="255" selection-end-column="37" />
+            <state relative-caret-position="416">
+              <caret line="52" column="9" lean-forward="true" selection-start-line="52" selection-start-column="9" selection-end-line="52" selection-end-column="9" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
-                <element signature="e#891#1391#0" expanded="false" />
-                <element signature="e#1393#1871#0" expanded="false" />
-                <element signature="e#1873#2368#0" expanded="false" />
-                <element signature="e#2370#3526#0" expanded="false" />
-                <element signature="e#3528#5618#0" expanded="false" />
-                <element signature="e#6831#7794#0" expanded="false" />
-                <element signature="e#7796#7966#0" expanded="false" />
+                <element signature="e#1868#2396#0" expanded="false" />
+                <element signature="e#2398#3554#0" expanded="false" />
+                <element signature="e#3556#5646#0" expanded="false" />
+                <element signature="e#6859#7822#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -53,6 +50,12 @@
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>flagsParallel</find>
+      <find>flagsParallel3</find>
+    </findStrings>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -128,7 +131,7 @@
     <configuration name="Build All" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="tp1" RUN_TARGET_NAME="tp1" EXPLICIT_BUILD_TARGET_NAME="all">
       <envs />
     </configuration>
-    <configuration name="tp1" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="10000 100" PASS_PARENT_ENVS_2="true" PROJECT_NAME="tp1" TARGET_NAME="tp1" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="tp1" RUN_TARGET_NAME="tp1">
+    <configuration name="tp1" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="100 10" PASS_PARENT_ENVS_2="true" PROJECT_NAME="tp1" TARGET_NAME="tp1" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="tp1" RUN_TARGET_NAME="tp1">
       <envs />
     </configuration>
     <list size="2">
@@ -150,12 +153,12 @@
       <option name="presentableId" value="Default" />
       <updated>1517622202237</updated>
       <workItem from="1517622206134" duration="3938000" />
-      <workItem from="1517670829913" duration="14785000" />
+      <workItem from="1517670829913" duration="16736000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18723000" />
+    <option name="totallyTimeSpent" value="20674000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -177,7 +180,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37768242" sideWeight="0.44855145" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27038628" sideWeight="0.5514485" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26609442" sideWeight="0.5514485" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939914" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -201,12 +204,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/premiers.cpp</url>
-          <line>99</line>
+          <line>97</line>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/premiers.cpp</url>
-          <line>61</line>
+          <line>58</line>
           <option name="timeStamp" value="15" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
@@ -226,13 +229,10 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
-            <element signature="e#891#1391#0" expanded="false" />
-            <element signature="e#1393#1871#0" expanded="false" />
-            <element signature="e#1873#2368#0" expanded="false" />
-            <element signature="e#2370#3526#0" expanded="false" />
-            <element signature="e#3528#5618#0" expanded="false" />
-            <element signature="e#6831#7794#0" expanded="false" />
-            <element signature="e#7796#7966#0" expanded="false" />
+            <element signature="e#1868#2396#0" expanded="false" />
+            <element signature="e#2398#3554#0" expanded="false" />
+            <element signature="e#3556#5646#0" expanded="false" />
+            <element signature="e#6859#7822#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -262,17 +262,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/premiers.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="547">
-          <caret line="255" column="37" lean-forward="false" selection-start-line="255" selection-start-column="37" selection-end-line="255" selection-end-column="37" />
+        <state relative-caret-position="416">
+          <caret line="52" column="9" lean-forward="true" selection-start-line="52" selection-start-column="9" selection-end-line="52" selection-end-column="9" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
-            <element signature="e#891#1391#0" expanded="false" />
-            <element signature="e#1393#1871#0" expanded="false" />
-            <element signature="e#1873#2368#0" expanded="false" />
-            <element signature="e#2370#3526#0" expanded="false" />
-            <element signature="e#3528#5618#0" expanded="false" />
-            <element signature="e#6831#7794#0" expanded="false" />
-            <element signature="e#7796#7966#0" expanded="false" />
+            <element signature="e#1868#2396#0" expanded="false" />
+            <element signature="e#2398#3554#0" expanded="false" />
+            <element signature="e#3556#5646#0" expanded="false" />
+            <element signature="e#6859#7822#0" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -43,14 +43,11 @@ void* executeEratosthene(void* iArgs) {
 
     unsigned int begin = (*lThreadInput).begin;
     unsigned int end = (*lThreadInput).end;
+    unsigned int wheelFactor = (*lThreadInput).wheelFactor;
 
-    begin = 2;
-
-    for (unsigned long p=begin; p < end; p++) {
+    for (unsigned long p=2; p < end; p++) {
         if (flagsParallel[p] == 0) {
-            // invalider tous les multiples
-            for (unsigned long i=begin; i*p < end; i++) {
-
+            for (unsigned long i=2; i*p < end; i++) {
                 flagsParallel[i*p]++;
             }
         }
@@ -65,10 +62,10 @@ void* executeEratosthene2(void* iArgs) {
 
     unsigned int wheelFactor = (*lThreadInput).wheelFactor;
 
-    for (unsigned long p=2; p < maxValue; p+=wheelFactor) {
+    for (unsigned long p=2; p < maxValue; p+=wheelFactor-2) {
         if (flagsParallel2[p] == 0) {
             // invalider tous les multiples
-            for (unsigned long i=2; i*p < maxValue; i+=wheelFactor) {
+            for (unsigned long i=2; i*p < maxValue; i+=wheelFactor-2) {
                 flagsParallel2[i*p]++;
             }
         }
@@ -84,12 +81,13 @@ void* executeEratosthene3(void* iArgs) {
     unsigned int begin = (*lThreadInput).begin;
     unsigned int end = (*lThreadInput).end;
 
+    if (begin == 1) begin = 2;
+
     for (unsigned long p=begin; p < maxValue; p++) {
-        if (flagsParallel[p] == 0) {
+        if (flagsParallel3[p] == 0) {
             // invalider tous les multiples
             for (unsigned long i=begin; i*p < maxValue; i++) {
-
-                flagsParallel[i*p]++;
+                flagsParallel3[i*p]++;
             }
         }
     }
@@ -310,8 +308,8 @@ void executeSequential(int argc, char *argv[]) {
 void showResults(long iMax, char* iFlags){
     printf("\nChiffres: ");
 
-    for (unsigned long p=2; p<iMax; p++) {
-        if (iFlags[p] == 0) printf("%ld ", p);
-    }
+    //for (unsigned long p=2; p<iMax; p++) {
+        //if (iFlags[p] == 0) printf("%ld ", p);
+    //}
 
 }
