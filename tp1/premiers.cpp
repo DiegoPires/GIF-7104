@@ -13,6 +13,7 @@ void executerParallele2(int argc, char **argv);
 void executerParallele3(int argc, char **argv);
 void executerParallele4(int argc, char **argv);
 void executerParallele5(int argc, char **argv);
+void executerParallele6(int argc, char **argv);
 void afficherResultats(long iMax, char *iFlags);
 
 // variables globales
@@ -21,9 +22,11 @@ char *flagsParallel2;
 char *flagsParallel3;
 char *flagsParallel4;
 char *flagsParallel5;
+char *flagsParallel6;
 
 pthread_mutex_t lock_x;
 pthread_mutex_t lock_x2;
+pthread_mutex_t lock_x6;
 
 int maxValue = 1000;
 
@@ -38,11 +41,12 @@ struct ThreadInput{
 int main(int argc, char *argv[]) {
 
     executerSequentiale(argc, argv);
-    executerParallele(argc, argv);
-    executerParallele2(argc, argv);
-    executerParallele3(argc, argv);
-    executerParallele4(argc, argv);
-    executerParallele5(argc, argv);
+    //executerParallele(argc, argv);
+    //executerParallele2(argc, argv);
+    //executerParallele3(argc, argv);
+    //executerParallele4(argc, argv);
+    //executerParallele5(argc, argv);
+    executerParallele6(argc, argv);
 
     return 0;
 }
@@ -52,9 +56,7 @@ void* executerEratosthene(void *iArgs) {
 
     struct ThreadInput *lThreadInput = (struct ThreadInput*)iArgs;
 
-    unsigned int begin = (*lThreadInput).begin;
     unsigned int end = (*lThreadInput).end;
-    unsigned int wheelFactor = (*lThreadInput).wheelFactor;
 
     for (unsigned long p=2; p < end; p++) {
         if (flagsParallel[p] == 0) {
@@ -92,7 +94,6 @@ void* executerEratosthene3(void *iArgs) {
     struct ThreadInput *lThreadInput = (struct ThreadInput*)iArgs;
 
     unsigned int begin = (*lThreadInput).begin;
-    unsigned int end = (*lThreadInput).end;
 
     if (begin == 1) begin = 2;
 
@@ -114,7 +115,6 @@ void* executerEratosthene4(void *iArgs) {
     struct ThreadInput *lThreadInput = (struct ThreadInput*)iArgs;
 
     unsigned int begin = (*lThreadInput).begin;
-    unsigned int end = (*lThreadInput).end;
 
     if (begin == 1) begin = 2;
 
@@ -137,12 +137,7 @@ void* executerEratosthene5(void *iArgs) {
 
     struct ThreadInput *lThreadInput = (struct ThreadInput*)iArgs;
 
-    unsigned int begin = (*lThreadInput).begin;
     unsigned int end = (*lThreadInput).end;
-    unsigned int id = (*lThreadInput).id;
-    unsigned int wheelFactor = (*lThreadInput).wheelFactor;
-
-    if (begin == 1) begin = 2;
 
     for (unsigned long p=2; p < sqrt(end); p++) {
 
@@ -160,6 +155,39 @@ void* executerEratosthene5(void *iArgs) {
         }
     }
 
+    pthread_exit(NULL);
+}
+
+void* executerEratosthene6(void *iArgs) {
+
+    struct ThreadInput *lThreadInput = (struct ThreadInput*)iArgs;
+
+    unsigned int begin = (*lThreadInput).begin;
+    unsigned int end = (*lThreadInput).end;
+    unsigned int id = (*lThreadInput).id;
+    //unsigned int wheelFactor = (*lThreadInput).wheelFactor;
+
+    int qttLoop = 0;
+    if (begin == 1) begin = 2;
+
+    for (unsigned long p=begin; p*p <= maxValue; p++) {
+
+        if (flagsParallel6[p] == 0) {
+            // invalider tous les multiples
+            for (unsigned long i=p*p; i <= maxValue; i+=p) {
+                // printf("\n%d - %d * %d = %d",id, i, p, i*p);
+
+                //pthread_mutex_lock(&lock_x6);
+                flagsParallel6[i]++;
+                //pthread_mutex_unlock(&lock_x6);
+
+                qttLoop++;
+            }
+        }
+    }
+
+    printf("\nThread %d : %d - %d", id, begin, end);
+    printf(" -- %d", qttLoop);
     pthread_exit(NULL);
 }
 
@@ -405,6 +433,61 @@ void executerParallele5(int argc, char **argv) {
     printf("\nTemps d'execution parallèle 5  = %f sec\n", lChrono.get());
 }
 
+void executerParallele6(int argc, char **argv) {
+
+    int lThreadCount = 1;
+    long lItemPourThread;
+    int weight = 1;
+    int begin = 2;
+
+    if (argc > 1) maxValue = atoi(argv[1]);
+    if (argc > 2) lThreadCount = atoi(argv[2]);
+
+    lItemPourThread = sqrt(maxValue) / lThreadCount;
+
+    struct ThreadInput *lInputThread = nullptr;
+
+    // Démarrer le chronomètre
+    Chrono lChrono(true);
+
+    flagsParallel6 = (char*) calloc(maxValue, sizeof(*flagsParallel6));
+    assert(flagsParallel6 != 0);
+
+    // declaration des threads
+    pthread_t eThread[lThreadCount];
+
+    // creation des threads
+    for(int i=0; i < lThreadCount; i++) {
+
+        weight = i+1;
+
+        lInputThread = (struct ThreadInput*)malloc(sizeof *lInputThread);
+        //lInputThread->begin = begin ;
+        //lInputThread->end = begin*weight ;
+
+        lInputThread->begin = i * lItemPourThread + 1 ;
+        lInputThread->end = (i + 1) * lItemPourThread ;
+
+        lInputThread->id = i ;
+
+        begin = lInputThread->end +1;
+
+        pthread_create(&eThread[i], NULL, executerEratosthene6, lInputThread);
+    }
+
+    // attends jusqu'a que les threads s'executent
+    for(int i=0; i < lThreadCount; i++){
+        pthread_join(eThread[i], NULL);
+    }
+
+    lChrono.pause();
+
+    // Afficher les nombres trouvés à la console
+    afficherResultats(maxValue, flagsParallel6);
+
+    printf("\nTemps d'execution parallèle 6  = %f sec\n", lChrono.get());
+}
+
 void executerSequentiale(int argc, char **argv) {
 
     // Déterminer la limite supérieure pour la recherche;
@@ -421,6 +504,8 @@ void executerSequentiale(int argc, char **argv) {
     char *lFlags = (char*) calloc(lMax, sizeof(*lFlags));
     assert(lFlags != 0);
 
+    int qqtLoop = 0;
+
     // Appliquer le crible d'Ératosthène
     for (unsigned long p=2; p < lMax; p++) {
         if (lFlags[p] == 0) {
@@ -428,12 +513,15 @@ void executerSequentiale(int argc, char **argv) {
             for (unsigned long i=2; i*p < lMax; i++) {
 
                 lFlags[i*p]++;
+                qqtLoop++;
             }
         }
     }
 
     // Arrêter le chronomètre
     lChrono.pause();
+
+    printf("qttLoop sequentiel %d", qqtLoop);
 
     // Afficher les nombres trouvés à la console
     afficherResultats(lMax, lFlags);
@@ -445,7 +533,7 @@ void executerSequentiale(int argc, char **argv) {
 
 void afficherResultats(long iMax, char *iFlags){
 
-    if (iMax < 1000){
+    if (iMax <= 100000){
         printf("\nChiffres: ");
 
         for (unsigned long p=2; p<iMax; p++) {
