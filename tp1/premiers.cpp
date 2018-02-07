@@ -7,14 +7,17 @@
 #include "Chrono.hpp"
 
 // déclaration des méthods
-void executerSequentiale(int argc, char **argv);
-void executerParallele(int argc, char **argv);
-void executerParallele2(int argc, char **argv);
-void executerParallele3(int argc, char **argv);
-void executerParallele4(int argc, char **argv);
-void executerParallele5(int argc, char **argv);
-void executerParallele6(int argc, char **argv);
-void afficherResultats(long iMax, char *iFlags);
+int executerSequentiale(int iMaxValue, bool iShowResult);
+int executerSequentialeOptimize(int iMaxValue, bool iShowResult);
+
+void executerParallele(int iMaxValue, int iThreadCount, int iComparableQtt, bool iShowResult);
+void executerParallele2(int iMaxValue, int iThreadCount, int iComparableQtt, bool iShowResult);
+void executerParallele3(int iMaxValue, int iThreadCount, int iComparableQtt, bool iShowResult);
+void executerParallele4(int iMaxValue, int iThreadCount, int iComparableQtt, bool iShowResult);
+void executerParallele5(int iMaxValue, int iThreadCount, int iComparableQtt, bool iShowResult);
+void executerParallele6(int iMaxValue, int iThreadCount, int iComparableQtt, bool iShowResult);
+
+int obtenirResultats(int iMaxValue, bool iShowResult, char *iFlags);
 
 // variables globales
 char *flagsParallel;
@@ -28,8 +31,6 @@ pthread_mutex_t lock_x;
 pthread_mutex_t lock_x2;
 pthread_mutex_t lock_x6;
 
-int maxValue = 1000;
-
 // structures de données
 struct ThreadInput{
     long id, begin, end, wheelFactor;
@@ -40,13 +41,22 @@ struct ThreadInput{
 // spécifié sur la ligne de commande.
 int main(int argc, char *argv[]) {
 
-    executerSequentiale(argc, argv);
-    //executerParallele(argc, argv);
-    //executerParallele2(argc, argv);
-    //executerParallele3(argc, argv);
-    //executerParallele4(argc, argv);
-    //executerParallele5(argc, argv);
-    executerParallele6(argc, argv);
+    int lThreadCount = 1, lMaxValue = 100;
+    bool lShowResult = false;
+
+    if (argc > 1) lMaxValue = atoi(argv[1]);
+    if (argc > 2) lThreadCount = atoi(argv[2]);
+    if (argc > 3) lShowResult = static_cast<bool>(argv[3]);
+
+    int lQtt = executerSequentiale(lMaxValue, lShowResult);
+    int lQttO = executerSequentialeOptimize(lMaxValue, lShowResult);
+
+    executerParallele(lMaxValue, lThreadCount, lQtt, lShowResult);
+    executerParallele2(lMaxValue, lThreadCount, lQtt, lShowResult);
+    executerParallele3(lMaxValue, lThreadCount, lQtt, lShowResult);
+    executerParallele4(lMaxValue, lThreadCount, lQtt, lShowResult);
+    executerParallele5(lMaxValue, lThreadCount, lQtt, lShowResult);
+    executerParallele6(lMaxValue, lThreadCount, lQtt, lShowResult);
 
     return 0;
 }
@@ -75,11 +85,12 @@ void* executerEratosthene2(void *iArgs) {
     struct ThreadInput *lThreadInput = (struct ThreadInput*)iArgs;
 
     unsigned int wheelFactor = (*lThreadInput).wheelFactor;
+    unsigned int end = (*lThreadInput).end;
 
-    for (unsigned long p=2; p < maxValue; p+=wheelFactor) {
+    for (unsigned long p=2; p < end; p+=wheelFactor) {
         if (flagsParallel2[p] == 0) {
             // invalider tous les multiples
-            for (unsigned long i=2; i*p < maxValue; i+=wheelFactor) {
+            for (unsigned long i=2; i*p < end; i+=wheelFactor) {
                 flagsParallel2[i*p]++;
             }
         }
@@ -94,13 +105,14 @@ void* executerEratosthene3(void *iArgs) {
     struct ThreadInput *lThreadInput = (struct ThreadInput*)iArgs;
 
     unsigned int begin = (*lThreadInput).begin;
+    unsigned int end = (*lThreadInput).end;
 
     if (begin == 1) begin = 2;
 
-    for (unsigned long p=begin; p < maxValue; p++) {
+    for (unsigned long p=begin; p < end; p++) {
         if (flagsParallel3[p] == 0) {
             // invalider tous les multiples
-            for (unsigned long i=begin; i*p < maxValue; i++) {
+            for (unsigned long i=begin; i*p < end; i++) {
                 flagsParallel3[i*p]++;
             }
         }
@@ -115,13 +127,14 @@ void* executerEratosthene4(void *iArgs) {
     struct ThreadInput *lThreadInput = (struct ThreadInput*)iArgs;
 
     unsigned int begin = (*lThreadInput).begin;
+    unsigned int end = (*lThreadInput).end;
 
     if (begin == 1) begin = 2;
 
-    for (unsigned long p=begin; p < maxValue; p++) {
+    for (unsigned long p=begin; p < end; p++) {
         if (flagsParallel4[p] == 0) {
             // invalider tous les multiples
-            for (unsigned long i=begin; i*p < maxValue; i++) {
+            for (unsigned long i=begin; i*p < end; i++) {
                 pthread_mutex_lock(&lock_x);
                 flagsParallel4[i*p]++;
                 pthread_mutex_unlock(&lock_x);
@@ -164,57 +177,47 @@ void* executerEratosthene6(void *iArgs) {
 
     unsigned int begin = (*lThreadInput).begin;
     unsigned int end = (*lThreadInput).end;
-    unsigned int id = (*lThreadInput).id;
-    //unsigned int wheelFactor = (*lThreadInput).wheelFactor;
 
     int qttLoop = 0;
     if (begin == 1) begin = 2;
 
-    for (unsigned long p=begin; p*p <= maxValue; p++) {
+    for (unsigned long p=begin; p*p <= end; p++) {
 
         if (flagsParallel6[p] == 0) {
             // invalider tous les multiples
-            for (unsigned long i=p*p; i <= maxValue; i+=p) {
+            for (unsigned long i=p*p; i <= end; i+=p) {
                 // printf("\n%d - %d * %d = %d",id, i, p, i*p);
 
                 //pthread_mutex_lock(&lock_x6);
                 flagsParallel6[i]++;
                 //pthread_mutex_unlock(&lock_x6);
 
-                qttLoop++;
+                //qttLoop++;
             }
         }
     }
 
-    printf("\nThread %d : %d - %d", id, begin, end);
-    printf(" -- %d", qttLoop);
+    //printf("\nThread %d : %d - %d --- %d", id, begin, end, qttLoop);
     pthread_exit(NULL);
 }
 
-void executerParallele(int argc, char **argv) {
+void executerParallele(int iMaxValue, int iThreadCount, int iComparableQtt, bool iShowResult) {
 
-    int lThreadCount = 1;
-    long lItemPourThread;
-
-    if (argc > 1) maxValue = atoi(argv[1]);
-    if (argc > 2) lThreadCount = atoi(argv[2]);
-
-    lItemPourThread = maxValue / lThreadCount;
+    long lItemPourThread = iMaxValue / iThreadCount;
 
     struct ThreadInput *lInput = nullptr;
-
 
     // Démarrer le chronomètre
     Chrono lChrono(true);
 
-    flagsParallel = (char*) calloc(maxValue, sizeof(*flagsParallel));
+    flagsParallel = (char*) calloc(iMaxValue, sizeof(*flagsParallel));
     assert(flagsParallel != 0);
 
     // declaration des threads
-    pthread_t eThread[lThreadCount];
+    pthread_t eThread[iThreadCount];
 
     // creation des threads
-    for(int i=0; i < lThreadCount; i++) {
+    for(int i=0; i < iThreadCount; i++) {
 
         lInput = (struct ThreadInput*)malloc(sizeof *lInput);
         lInput->begin = i * lItemPourThread + 1 ;
@@ -224,39 +227,32 @@ void executerParallele(int argc, char **argv) {
     }
 
     // attends jusqu'a que les threads s'executent
-    for(int i=0; i < lThreadCount; i++){
+    for(int i=0; i < iThreadCount; i++){
         pthread_join(eThread[i], NULL);
     }
 
     lChrono.pause();
 
     // Afficher les nombres trouvés à la console
-    afficherResultats(maxValue, flagsParallel);
+    int lQtt = obtenirResultats(iMaxValue, iShowResult, flagsParallel);
 
-    printf("\nTemps d'execution parallèle    = %f sec\n", lChrono.get());
+    printf("\nTemps d'execution parallèle 1 (%s)  = %f sec\n", (lQtt == iComparableQtt ? "BON" : "PAS"), lChrono.get());
 }
 
-void executerParallele2(int argc, char **argv) {
+void executerParallele2(int iMaxValue, int iThreadCount, int iComparableQtt, bool iShowResult) {
 
-
-    int lThreadCount = 1;
-    long lItemPourThread;
-
-    if (argc > 1) maxValue = atoi(argv[1]);
-    if (argc > 2) lThreadCount = atoi(argv[2]);
-
-    lItemPourThread = maxValue / lThreadCount;
+    long lItemPourThread = iMaxValue / iThreadCount;
 
     struct ThreadInput *lInput = nullptr;
 
     // Démarrer le chronomètre
     Chrono lChrono(true);
 
-    flagsParallel2 = (char*) calloc(maxValue, sizeof(*flagsParallel2));
+    flagsParallel2 = (char*) calloc(iMaxValue, sizeof(*flagsParallel2));
     assert(flagsParallel2 != 0);
 
     // declaration des threads
-    pthread_t eThread[lThreadCount];
+    pthread_t eThread[iThreadCount];
 
 
     lInput = (struct ThreadInput*)malloc(sizeof *lInput);
@@ -272,144 +268,122 @@ void executerParallele2(int argc, char **argv) {
     */
 
     // creation des threads
-    for(int i=0; i < lThreadCount; i++) {
+    for(int i=0; i < iThreadCount; i++) {
 
         lInput->wheelFactor = lItemPourThread ;
+        lInput->end = iMaxValue ;
 
         pthread_create(&eThread[i], NULL, executerEratosthene2, lInput);
     }
 
-    for (unsigned long p=7; p < maxValue; p+=1) {
-        if (flagsParallel2[p] == 0 && ((p % 2 == 0) || (p % 3 == 0) || (p % 5 == 0) || (p % 7 == 0))){
-            flagsParallel2[p]++;
-        }
-    }
-
     // attends jusqu'a que les threads s'executent
-    for(int i=0; i < lThreadCount; i++){
+    for(int i=0; i < iThreadCount; i++){
         pthread_join(eThread[i], NULL);
     }
 
     lChrono.pause();
 
     // Afficher les nombres trouvés à la console
-    afficherResultats(maxValue, flagsParallel2);
-    printf("\nTemps d'execution parallèle 2  = %f sec\n", lChrono.get());
+    int lQtt = obtenirResultats(iMaxValue, iShowResult, flagsParallel2);
+
+    printf("\nTemps d'execution parallèle 2 (%s)  = %f sec\n", (lQtt == iComparableQtt ? "BON" : "PAS"), lChrono.get());
 }
 
-void executerParallele3(int argc, char **argv) {
+void executerParallele3(int iMaxValue, int iThreadCount, int iComparableQtt, bool iShowResult) {
 
-    int lThreadCount = 1;
-    long lItemPourThread;
-
-    if (argc > 1) maxValue = atoi(argv[1]);
-    if (argc > 2) lThreadCount = atoi(argv[2]);
-
-    lItemPourThread = maxValue / lThreadCount;
+    long lItemPourThread = iMaxValue / iThreadCount;
 
     struct ThreadInput *lInput = nullptr;
 
     // Démarrer le chronomètre
     Chrono lChrono(true);
 
-    flagsParallel3 = (char*) calloc(maxValue, sizeof(*flagsParallel3));
+    flagsParallel3 = (char*) calloc(iMaxValue, sizeof(*flagsParallel3));
     assert(flagsParallel3 != 0);
 
     // declaration des threads
-    pthread_t eThread[lThreadCount];
+    pthread_t eThread[iThreadCount];
 
     // creation des threads
-    for(int i=0; i < lThreadCount; i++) {
+    for(int i=0; i < iThreadCount; i++) {
 
         lInput = (struct ThreadInput*)malloc(sizeof *lInput);
         lInput->begin = i * lItemPourThread + 1 ;
-        lInput->end = (i + 1) * lItemPourThread ;
+        lInput->end = iMaxValue ;
         lInput->wheelFactor = lItemPourThread ;
 
         pthread_create(&eThread[i], NULL, executerEratosthene3, lInput);
     }
 
     // attends jusqu'a que les threads s'executent
-    for(int i=0; i < lThreadCount; i++){
+    for(int i=0; i < iThreadCount; i++){
         pthread_join(eThread[i], NULL);
     }
 
     lChrono.pause();
 
     // Afficher les nombres trouvés à la console
-    afficherResultats(maxValue, flagsParallel3);
+    int lQtt = obtenirResultats(iMaxValue, iShowResult, flagsParallel3);
 
-    printf("\nTemps d'execution parallèle 3  = %f sec\n", lChrono.get());
+    printf("\nTemps d'execution parallèle 3 (%s)  = %f sec\n", (lQtt == iComparableQtt ? "BON" : "PAS"), lChrono.get());
 }
 
-void executerParallele4(int argc, char **argv) {
+void executerParallele4(int iMaxValue, int iThreadCount, int iComparableQtt, bool iShowResult) {
 
-    int lThreadCount = 1;
-    long lItemPourThread;
-
-    if (argc > 1) maxValue = atoi(argv[1]);
-    if (argc > 2) lThreadCount = atoi(argv[2]);
-
-    lItemPourThread = maxValue / lThreadCount;
+    long lItemPourThread = iMaxValue / iThreadCount;
 
     struct ThreadInput *lInput = nullptr;
 
     // Démarrer le chronomètre
     Chrono lChrono(true);
 
-    flagsParallel4 = (char*) calloc(maxValue, sizeof(*flagsParallel4));
+    flagsParallel4 = (char*) calloc(iMaxValue, sizeof(*flagsParallel4));
     assert(flagsParallel4 != 0);
 
     // declaration des threads
-    pthread_t eThread[lThreadCount];
+    pthread_t eThread[iThreadCount];
 
     // creation des threads
-    for(int i=0; i < lThreadCount; i++) {
+    for(int i=0; i < iThreadCount; i++) {
 
         lInput = (struct ThreadInput*)malloc(sizeof *lInput);
         lInput->begin = i * lItemPourThread + 1 ;
-        lInput->end = (i + 1) * lItemPourThread ;
+        lInput->end = iMaxValue ;
         lInput->wheelFactor = lItemPourThread ;
 
         pthread_create(&eThread[i], NULL, executerEratosthene4, lInput);
     }
 
     // attends jusqu'a que les threads s'executent
-    for(int i=0; i < lThreadCount; i++){
+    for(int i=0; i < iThreadCount; i++){
         pthread_join(eThread[i], NULL);
     }
 
     lChrono.pause();
 
     // Afficher les nombres trouvés à la console
-    afficherResultats(maxValue, flagsParallel4);
+    int lQtt = obtenirResultats(iMaxValue, iShowResult, flagsParallel4);
 
-    printf("\nTemps d'execution parallèle 4  = %f sec\n", lChrono.get());
+    printf("\nTemps d'execution parallèle 4 (%s)  = %f sec\n", (lQtt == iComparableQtt ? "BON" : "PAS"), lChrono.get());
 }
 
-void executerParallele5(int argc, char **argv) {
+void executerParallele5(int iMaxValue, int iThreadCount, int iComparableQtt, bool iShowResult) {
 
-    int lThreadCount = 1;
-    long lItemPourThread;
-
-    if (argc > 1) maxValue = atoi(argv[1]);
-    if (argc > 2) lThreadCount = atoi(argv[2]);
-
-    lItemPourThread = maxValue / lThreadCount;
+    long lItemPourThread = iMaxValue / iThreadCount;
 
     struct ThreadInput *lInput = nullptr;
 
     // Démarrer le chronomètre
     Chrono lChrono(true);
 
-    flagsParallel5 = (char*) calloc(maxValue, sizeof(*flagsParallel5));
+    flagsParallel5 = (char*) calloc(iMaxValue, sizeof(*flagsParallel5));
     assert(flagsParallel5 != 0);
 
     // declaration des threads
-    pthread_t eThread[lThreadCount];
+    pthread_t eThread[iThreadCount];
 
     // creation des threads
-    for(int i=0; i < lThreadCount; i++) {
+    for(int i=0; i < iThreadCount; i++) {
 
         lInput = (struct ThreadInput*)malloc(sizeof *lInput);
         lInput->begin = i * lItemPourThread + 1 ;
@@ -421,81 +395,67 @@ void executerParallele5(int argc, char **argv) {
     }
 
     // attends jusqu'a que les threads s'executent
-    for(int i=0; i < lThreadCount; i++){
+    for(int i=0; i < iThreadCount; i++){
         pthread_join(eThread[i], NULL);
     }
 
     lChrono.pause();
 
     // Afficher les nombres trouvés à la console
-    afficherResultats(maxValue, flagsParallel5);
+    int lQtt = obtenirResultats(iMaxValue, iShowResult, flagsParallel5);
 
-    printf("\nTemps d'execution parallèle 5  = %f sec\n", lChrono.get());
+    printf("\nTemps d'execution parallèle 5 (%s)  = %f sec\n", (lQtt == iComparableQtt ? "BON" : "PAS"), lChrono.get());
 }
 
-void executerParallele6(int argc, char **argv) {
+void executerParallele6(int iMaxValue, int iThreadCount, int iComparableQtt, bool iShowResult) {
 
-    int lThreadCount = 1;
-    long lItemPourThread;
-    int weight = 1;
-    int begin = 2;
-
-    if (argc > 1) maxValue = atoi(argv[1]);
-    if (argc > 2) lThreadCount = atoi(argv[2]);
-
-    lItemPourThread = sqrt(maxValue) / lThreadCount;
+    int lItemPourThread = sqrt(iMaxValue) / iThreadCount;
 
     struct ThreadInput *lInputThread = nullptr;
 
     // Démarrer le chronomètre
     Chrono lChrono(true);
 
-    flagsParallel6 = (char*) calloc(maxValue, sizeof(*flagsParallel6));
+    flagsParallel6 = (char*) calloc(iMaxValue, sizeof(*flagsParallel6));
     assert(flagsParallel6 != 0);
 
     // declaration des threads
-    pthread_t eThread[lThreadCount];
+    pthread_t eThread[iThreadCount];
 
     // creation des threads
-    for(int i=0; i < lThreadCount; i++) {
+    for(int i=0; i < iThreadCount; i++) {
 
-        weight = i+1;
+        //weight = i+1;
 
         lInputThread = (struct ThreadInput*)malloc(sizeof *lInputThread);
         //lInputThread->begin = begin ;
         //lInputThread->end = begin*weight ;
 
         lInputThread->begin = i * lItemPourThread + 1 ;
-        lInputThread->end = (i + 1) * lItemPourThread ;
-
+        lInputThread->end = iMaxValue ;
         lInputThread->id = i ;
-
-        begin = lInputThread->end +1;
 
         pthread_create(&eThread[i], NULL, executerEratosthene6, lInputThread);
     }
 
     // attends jusqu'a que les threads s'executent
-    for(int i=0; i < lThreadCount; i++){
+    for(int i=0; i < iThreadCount; i++){
         pthread_join(eThread[i], NULL);
     }
 
     lChrono.pause();
 
     // Afficher les nombres trouvés à la console
-    afficherResultats(maxValue, flagsParallel6);
+    int lQtt = obtenirResultats(iMaxValue, iShowResult, flagsParallel6);
 
-    printf("\nTemps d'execution parallèle 6  = %f sec\n", lChrono.get());
+    printf("\nTemps d'execution parallèle 6 (%s)  = %f sec\n", (lQtt == iComparableQtt ? "BON" : "PAS"), lChrono.get());
 }
 
-void executerSequentiale(int argc, char **argv) {
+int executerSequentiale(int iMaxValue, bool iShowResult) {
 
     // Déterminer la limite supérieure pour la recherche;
     // par défaut, prendre 1000
-    long lMax = 1000;
-    if (argc >= 2) {
-        lMax = atol(argv[1]);
-    }
+    long lMax = iMaxValue;
 
     // Démarrer le chronomètre
     Chrono lChrono(true);
@@ -504,16 +464,12 @@ void executerSequentiale(int argc, char **argv) {
     char *lFlags = (char*) calloc(lMax, sizeof(*lFlags));
     assert(lFlags != 0);
 
-    int qqtLoop = 0;
-
     // Appliquer le crible d'Ératosthène
     for (unsigned long p=2; p < lMax; p++) {
         if (lFlags[p] == 0) {
             // invalider tous les multiples
             for (unsigned long i=2; i*p < lMax; i++) {
-
                 lFlags[i*p]++;
-                qqtLoop++;
             }
         }
     }
@@ -521,23 +477,61 @@ void executerSequentiale(int argc, char **argv) {
     // Arrêter le chronomètre
     lChrono.pause();
 
-    printf("qttLoop sequentiel %d", qqtLoop);
-
     // Afficher les nombres trouvés à la console
-    afficherResultats(lMax, lFlags);
+    int lQtt = obtenirResultats(iMaxValue, iShowResult, lFlags);
 
     // Afficher le temps d'exécution dans le stderr
-    printf("\nTemps d'execution séquentielle = %f sec\n", lChrono.get());
+    printf("\nTemps d'execution séquentielle       = %f sec\n", lChrono.get());
 
+    return lQtt;
 }
 
-void afficherResultats(long iMax, char *iFlags){
+int executerSequentialeOptimize(int iMaxValue, bool iShowResult) {
 
-    if (iMax <= 100000){
-        printf("\nChiffres: ");
+    // Déterminer la limite supérieure pour la recherche;
+    // par défaut, prendre 1000
+    long lMax = iMaxValue;
 
-        for (unsigned long p=2; p<iMax; p++) {
-            if (iFlags[p] == 0) printf("%lu ", p);
+    // Démarrer le chronomètre
+    Chrono lChrono(true);
+
+    // Allouer le tableau des drapeaux (flags) d'invalidation
+    char *lFlags2 = (char*) calloc(lMax, sizeof(*lFlags2));
+    assert(lFlags2 != 0);
+
+    for (unsigned long p=2; p*p <= lMax; p++) {
+
+        if (lFlags2[p] == 0) {
+            // invalider tous les multiples
+            for (unsigned long i=p*p; i <= lMax; i+=p) {
+                lFlags2[i]++;
+            }
         }
     }
+
+    // Arrêter le chronomètre
+    lChrono.pause();
+
+    // Afficher les nombres trouvés à la console
+    int lQtt = obtenirResultats(iMaxValue, iShowResult, lFlags2);
+
+    // Afficher le temps d'exécution dans le stderr
+    printf("\nTemps d'execution séquentielle 2     = %f sec\n", lChrono.get());
+
+    return lQtt;
+}
+
+int obtenirResultats(int iMaxValue, bool iShowResult, char *iFlags){
+
+    int lQuantite = 0;
+    if (iShowResult) printf("\nChiffres: ");
+
+    for (unsigned long p=2; p<iMaxValue; p++) {
+        if (iFlags[p] == 0) {
+            lQuantite += 1;
+            if (iShowResult) printf("%lu ", p);
+        }
+    }
+
+    return lQuantite;
 }
