@@ -42,6 +42,8 @@ int main(int argc, char *argv[]) {
 
     int lThreadCount = 4, lMaxValue = 100;
     int lQttExecution = argc <= 1 ? 4 : 1;
+    int lQttThread = argc <= 1 ? 4 : 1;
+
     bool lShowResult = argc <= 1 ? false : true;
 
     if (argc > 1) lMaxValue = atoi(argv[1]);
@@ -52,22 +54,26 @@ int main(int argc, char *argv[]) {
     // de chaque algorithme plusieurs fois, avec une quantité max d'elements
     // grandissent.
     // On fait ca pour gerer les donnes de performance pour le rapport final
-    for (int lExecutions=1; lExecutions <= lQttExecution; lExecutions++) {
+    for (int lExecutionsThread=1; lExecutionsThread <= lQttThread; lExecutionsThread++) {
 
-        lMaxValue = pow(10, lExecutions + 4);
+        for (int lExecutions=1; lExecutions <= lQttExecution; lExecutions++) {
 
-        printf("\n\n** Éxecution %d sur %d items et %d threads\n", lExecutions, lMaxValue, lThreadCount);
+            lMaxValue = argc > 1 ? lMaxValue : pow(10, lExecutions + 4);
+            lThreadCount = argc > 2 ? lThreadCount : lExecutionsThread;
 
-        int lQtt = executerSequentiale(lMaxValue, lShowResult);
-        int lQttO = executerSequentialeOptimize(lMaxValue, lShowResult);
+            printf("\n\n** Éxecution %d sur %d items et %d threads\n", lExecutions, lMaxValue, lThreadCount);
 
-        executerParallele(lMaxValue, lThreadCount, lQtt, lShowResult);
-        executerParallele2(lMaxValue, lThreadCount, lQtt, lShowResult);
-        executerParallele3(lMaxValue, lThreadCount, lQtt, lShowResult);
-        executerParallele4(lMaxValue, lThreadCount, lQtt, lShowResult);
-        executerParallele5(lMaxValue, lThreadCount, lQtt, lShowResult);
-        executerParallele6(lMaxValue, lThreadCount, lQtt, lShowResult);
+            int lQtt = executerSequentiale(lMaxValue, lShowResult);
+            int lQttO = executerSequentialeOptimize(lMaxValue, lShowResult);
 
+            executerParallele(lMaxValue, lThreadCount, lQtt, lShowResult);
+            executerParallele2(lMaxValue, lThreadCount, lQtt, lShowResult);
+            executerParallele3(lMaxValue, lThreadCount, lQtt, lShowResult);
+            executerParallele4(lMaxValue, lThreadCount, lQtt, lShowResult);
+            executerParallele5(lMaxValue, lThreadCount, lQtt, lShowResult);
+            executerParallele6(lMaxValue, lThreadCount, lQtt, lShowResult);
+
+        }
     }
     return 0;
 }
