@@ -29,9 +29,8 @@ char *flagsParallel6;
 
 pthread_mutex_t lock_x;
 pthread_mutex_t lock_x2;
-pthread_mutex_t lock_x6;
 
-// structures de données
+// structures de données utilise dans les Threads
 struct ThreadInput{
     long id, begin, end, wheelFactor;
 };
@@ -41,23 +40,35 @@ struct ThreadInput{
 // spécifié sur la ligne de commande.
 int main(int argc, char *argv[]) {
 
-    int lThreadCount = 1, lMaxValue = 100;
-    bool lShowResult = false;
+    int lThreadCount = 4, lMaxValue = 100;
+    int lQttExecution = argc <= 1 ? 4 : 1;
+    bool lShowResult = argc <= 1 ? false : true;
 
     if (argc > 1) lMaxValue = atoi(argv[1]);
     if (argc > 2) lThreadCount = atoi(argv[2]);
     if (argc > 3) lShowResult = static_cast<bool>(argv[3]);
 
-    int lQtt = executerSequentiale(lMaxValue, lShowResult);
-    int lQttO = executerSequentialeOptimize(lMaxValue, lShowResult);
+    // Dans le cas qu'on recois aucun parametre, calculer le temps d'execution
+    // de chaque algorithme plusieurs fois, avec une quantité max d'elements
+    // grandissent.
+    // On fait ca pour gerer les donnes de performance pour le rapport final
+    for (int lExecutions=1; lExecutions <= lQttExecution; lExecutions++) {
 
-    executerParallele(lMaxValue, lThreadCount, lQtt, lShowResult);
-    executerParallele2(lMaxValue, lThreadCount, lQtt, lShowResult);
-    executerParallele3(lMaxValue, lThreadCount, lQtt, lShowResult);
-    executerParallele4(lMaxValue, lThreadCount, lQtt, lShowResult);
-    executerParallele5(lMaxValue, lThreadCount, lQtt, lShowResult);
-    executerParallele6(lMaxValue, lThreadCount, lQtt, lShowResult);
+        lMaxValue = pow(10, lExecutions + 4);
 
+        printf("\n\n** Éxecution %d sur %d items et %d threads\n", lExecutions, lMaxValue, lThreadCount);
+
+        int lQtt = executerSequentiale(lMaxValue, lShowResult);
+        int lQttO = executerSequentialeOptimize(lMaxValue, lShowResult);
+
+        executerParallele(lMaxValue, lThreadCount, lQtt, lShowResult);
+        executerParallele2(lMaxValue, lThreadCount, lQtt, lShowResult);
+        executerParallele3(lMaxValue, lThreadCount, lQtt, lShowResult);
+        executerParallele4(lMaxValue, lThreadCount, lQtt, lShowResult);
+        executerParallele5(lMaxValue, lThreadCount, lQtt, lShowResult);
+        executerParallele6(lMaxValue, lThreadCount, lQtt, lShowResult);
+
+    }
     return 0;
 }
 
@@ -178,7 +189,6 @@ void* executerEratosthene6(void *iArgs) {
     unsigned int begin = (*lThreadInput).begin;
     unsigned int end = (*lThreadInput).end;
 
-    int qttLoop = 0;
     if (begin == 1) begin = 2;
 
     for (unsigned long p=begin; p*p <= end; p++) {
@@ -186,21 +196,15 @@ void* executerEratosthene6(void *iArgs) {
         if (flagsParallel6[p] == 0) {
             // invalider tous les multiples
             for (unsigned long i=p*p; i <= end; i+=p) {
-                // printf("\n%d - %d * %d = %d",id, i, p, i*p);
-
-                //pthread_mutex_lock(&lock_x6);
                 flagsParallel6[i]++;
-                //pthread_mutex_unlock(&lock_x6);
-
-                //qttLoop++;
             }
         }
     }
 
-    //printf("\nThread %d : %d - %d --- %d", id, begin, end, qttLoop);
     pthread_exit(NULL);
 }
 
+// Méthodes d'executions du sieve
 void executerParallele(int iMaxValue, int iThreadCount, int iComparableQtt, bool iShowResult) {
 
     long lItemPourThread = iMaxValue / iThreadCount;
@@ -521,12 +525,15 @@ int executerSequentialeOptimize(int iMaxValue, bool iShowResult) {
     return lQtt;
 }
 
+// Méthode utilise pour afficher les resultats calcules du sieve
 int obtenirResultats(int iMaxValue, bool iShowResult, char *iFlags){
 
     int lQuantite = 0;
+    int lQuantiteAfficher = iMaxValue > 10000 ? 10000 : iMaxValue;
+
     if (iShowResult) printf("\nChiffres: ");
 
-    for (unsigned long p=2; p<iMaxValue; p++) {
+    for (unsigned long p=2; p<lQuantiteAfficher; p++) {
         if (iFlags[p] == 0) {
             lQuantite += 1;
             if (iShowResult) printf("%lu ", p);
