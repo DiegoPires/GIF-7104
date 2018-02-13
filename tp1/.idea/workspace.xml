@@ -26,33 +26,14 @@
       <file leaf-file-name="premiers.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/premiers.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="55">
-              <caret line="301" column="95" lean-forward="false" selection-start-line="301" selection-start-column="95" selection-end-line="301" selection-end-column="95" />
+            <state relative-caret-position="6462">
+              <caret line="461" column="51" lean-forward="false" selection-start-line="461" selection-start-column="51" selection-end-line="461" selection-end-column="51" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
-                <element signature="e#3074#3514#0" expanded="false" />
-                <element signature="e#3516#4102#0" expanded="false" />
-                <element signature="e#4689#5366#0" expanded="false" />
-                <element signature="e#5368#6098#0" expanded="false" />
-                <element signature="e#6621#7798#0" expanded="false" />
-                <element signature="e#7800#9128#0" expanded="false" />
-                <element signature="e#9130#10311#0" expanded="false" />
-                <element signature="e#10313#11494#0" expanded="false" />
-                <element signature="e#11496#12718#0" expanded="false" />
-                <element signature="e#14038#15015#0" expanded="false" />
-                <element signature="e#15017#15971#0" expanded="false" />
-                <element signature="e#15973#16447#0" expanded="false" />
+                <element signature="e#14050#15027#0" expanded="false" />
+                <element signature="e#15029#15983#0" expanded="false" />
+                <element signature="e#15985#16459#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Chrono.hpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Chrono.hpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -171,7 +152,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="40656000" />
+    <option name="totallyTimeSpent" value="42890000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -184,26 +165,36 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="840" y="23" width="840" height="1027" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2200489" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21978022" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939914" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32832617" sideWeight="0.5024975" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939914" sideWeight="0.4965035" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37768242" sideWeight="0.44855145" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4356223" sideWeight="0.5514485" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939914" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2972103" sideWeight="0.4925075" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939914" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32832617" sideWeight="0.5024975" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939914" sideWeight="0.4965035" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37768242" sideWeight="0.44855145" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4356223" sideWeight="0.5514485" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939914" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2200489" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939914" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2972103" sideWeight="0.4925075" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -217,17 +208,17 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/premiers.cpp</url>
-          <line>165</line>
+          <line>166</line>
           <option name="timeStamp" value="19" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/premiers.cpp</url>
-          <line>141</line>
+          <line>142</line>
           <option name="timeStamp" value="20" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/premiers.cpp</url>
-          <line>119</line>
+          <line>120</line>
           <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
@@ -237,12 +228,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/premiers.cpp</url>
-          <line>190</line>
+          <line>191</line>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/premiers.cpp</url>
-          <line>379</line>
+          <line>380</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
@@ -252,7 +243,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/premiers.cpp</url>
-          <line>100</line>
+          <line>101</line>
           <option name="timeStamp" value="29" />
         </line-breakpoint>
       </breakpoints>
@@ -267,18 +258,9 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
-            <element signature="e#3074#3514#0" expanded="false" />
-            <element signature="e#3516#4102#0" expanded="false" />
-            <element signature="e#4689#5366#0" expanded="false" />
-            <element signature="e#5368#6098#0" expanded="false" />
-            <element signature="e#6621#7798#0" expanded="false" />
-            <element signature="e#7800#9128#0" expanded="false" />
-            <element signature="e#9130#10311#0" expanded="false" />
-            <element signature="e#10313#11494#0" expanded="false" />
-            <element signature="e#11496#12718#0" expanded="false" />
-            <element signature="e#14038#15015#0" expanded="false" />
-            <element signature="e#15017#15971#0" expanded="false" />
-            <element signature="e#15973#16447#0" expanded="false" />
+            <element signature="e#14050#15027#0" expanded="false" />
+            <element signature="e#15029#15983#0" expanded="false" />
+            <element signature="e#15985#16459#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -297,18 +279,9 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
-            <element signature="e#3074#3514#0" expanded="false" />
-            <element signature="e#3516#4102#0" expanded="false" />
-            <element signature="e#4689#5366#0" expanded="false" />
-            <element signature="e#5368#6098#0" expanded="false" />
-            <element signature="e#6621#7798#0" expanded="false" />
-            <element signature="e#7800#9128#0" expanded="false" />
-            <element signature="e#9130#10311#0" expanded="false" />
-            <element signature="e#10313#11494#0" expanded="false" />
-            <element signature="e#11496#12718#0" expanded="false" />
-            <element signature="e#14038#15015#0" expanded="false" />
-            <element signature="e#15017#15971#0" expanded="false" />
-            <element signature="e#15973#16447#0" expanded="false" />
+            <element signature="e#14050#15027#0" expanded="false" />
+            <element signature="e#15029#15983#0" expanded="false" />
+            <element signature="e#15985#16459#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -327,18 +300,9 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
-            <element signature="e#3074#3514#0" expanded="false" />
-            <element signature="e#3516#4102#0" expanded="false" />
-            <element signature="e#4689#5366#0" expanded="false" />
-            <element signature="e#5368#6098#0" expanded="false" />
-            <element signature="e#6621#7798#0" expanded="false" />
-            <element signature="e#7800#9128#0" expanded="false" />
-            <element signature="e#9130#10311#0" expanded="false" />
-            <element signature="e#10313#11494#0" expanded="false" />
-            <element signature="e#11496#12718#0" expanded="false" />
-            <element signature="e#14038#15015#0" expanded="false" />
-            <element signature="e#15017#15971#0" expanded="false" />
-            <element signature="e#15973#16447#0" expanded="false" />
+            <element signature="e#14050#15027#0" expanded="false" />
+            <element signature="e#15029#15983#0" expanded="false" />
+            <element signature="e#15985#16459#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -357,18 +321,9 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
-            <element signature="e#3074#3514#0" expanded="false" />
-            <element signature="e#3516#4102#0" expanded="false" />
-            <element signature="e#4689#5366#0" expanded="false" />
-            <element signature="e#5368#6098#0" expanded="false" />
-            <element signature="e#6621#7798#0" expanded="false" />
-            <element signature="e#7800#9128#0" expanded="false" />
-            <element signature="e#9130#10311#0" expanded="false" />
-            <element signature="e#10313#11494#0" expanded="false" />
-            <element signature="e#11496#12718#0" expanded="false" />
-            <element signature="e#14038#15015#0" expanded="false" />
-            <element signature="e#15017#15971#0" expanded="false" />
-            <element signature="e#15973#16447#0" expanded="false" />
+            <element signature="e#14050#15027#0" expanded="false" />
+            <element signature="e#15029#15983#0" expanded="false" />
+            <element signature="e#15985#16459#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -378,6 +333,19 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/premiers.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+            <element signature="e#14050#15027#0" expanded="false" />
+            <element signature="e#15029#15983#0" expanded="false" />
+            <element signature="e#15985#16459#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -398,22 +366,133 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/premiers.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="55">
-          <caret line="301" column="95" lean-forward="false" selection-start-line="301" selection-start-column="95" selection-end-line="301" selection-end-column="95" />
+        <state relative-caret-position="35">
+          <caret line="140" column="15" lean-forward="false" selection-start-line="140" selection-start-column="15" selection-end-line="140" selection-end-column="15" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
-            <element signature="e#3074#3514#0" expanded="false" />
-            <element signature="e#3516#4102#0" expanded="false" />
-            <element signature="e#4689#5366#0" expanded="false" />
-            <element signature="e#5368#6098#0" expanded="false" />
-            <element signature="e#6621#7798#0" expanded="false" />
-            <element signature="e#7800#9128#0" expanded="false" />
-            <element signature="e#9130#10311#0" expanded="false" />
-            <element signature="e#10313#11494#0" expanded="false" />
-            <element signature="e#11496#12718#0" expanded="false" />
-            <element signature="e#14038#15015#0" expanded="false" />
-            <element signature="e#15017#15971#0" expanded="false" />
-            <element signature="e#15973#16447#0" expanded="false" />
+            <element signature="e#14050#15027#0" expanded="false" />
+            <element signature="e#15029#15983#0" expanded="false" />
+            <element signature="e#15985#16459#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Chrono.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/premiers.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+            <element signature="e#14050#15027#0" expanded="false" />
+            <element signature="e#15029#15983#0" expanded="false" />
+            <element signature="e#15985#16459#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Chrono.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/premiers.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+            <element signature="e#14050#15027#0" expanded="false" />
+            <element signature="e#15029#15983#0" expanded="false" />
+            <element signature="e#15985#16459#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Chrono.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/premiers.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+            <element signature="e#14050#15027#0" expanded="false" />
+            <element signature="e#15029#15983#0" expanded="false" />
+            <element signature="e#15985#16459#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Chrono.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/premiers.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+            <element signature="e#14050#15027#0" expanded="false" />
+            <element signature="e#15029#15983#0" expanded="false" />
+            <element signature="e#15985#16459#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Chrono.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Chrono.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1075">
+          <caret line="10" column="17" lean-forward="true" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/premiers.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6462">
+          <caret line="461" column="51" lean-forward="false" selection-start-line="461" selection-start-column="51" selection-end-line="461" selection-end-column="51" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+            <element signature="e#14050#15027#0" expanded="false" />
+            <element signature="e#15029#15983#0" expanded="false" />
+            <element signature="e#15985#16459#0" expanded="false" />
           </folding>
         </state>
       </provider>

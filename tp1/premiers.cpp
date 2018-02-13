@@ -40,7 +40,7 @@ struct ThreadInput{
 // spécifié sur la ligne de commande.
 int main(int argc, char *argv[]) {
 
-    int lThreadCount = 4, lMaxValue = 100;
+    int lThreadCount = 1, lMaxValue = 100;
     int lQttExecution = argc <= 1 ? 4 : 1;
     int lQttThread = argc <= 1 ? 4 : 1;
 
@@ -54,12 +54,13 @@ int main(int argc, char *argv[]) {
     // de chaque algorithme plusieurs fois, avec une quantité max d'elements
     // grandissent.
     // On fait ca pour gerer les donnes de performance pour le rapport final
-    for (int lExecutionsThread=1; lExecutionsThread <= lQttThread; lExecutionsThread++) {
+    for (int lExecutionsThread=0; lExecutionsThread < lQttThread; lExecutionsThread++) {
+
+        lThreadCount = argc > 2 ? lThreadCount : lThreadCount +=lExecutionsThread ;
 
         for (int lExecutions=1; lExecutions <= lQttExecution; lExecutions++) {
 
             lMaxValue = argc > 1 ? lMaxValue : pow(10, lExecutions + 4);
-            lThreadCount = argc > 2 ? lThreadCount : lExecutionsThread;
 
             printf("\n\n** Éxecution %d sur %d items et %d threads\n", lExecutions, lMaxValue, lThreadCount);
 
