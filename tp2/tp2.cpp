@@ -60,6 +60,7 @@ int main(int inArgc, char *inArgv[])
 
     // Lire le noyau.
     ifstream lConfig;
+
     lConfig.open(inArgv[2]);
     if (!lConfig.is_open()) {
         cerr << "Le fichier noyau fourni (" << inArgv[2] << ") est invalide." << endl;
@@ -76,7 +77,10 @@ int main(int inArgc, char *inArgv[])
     int lHalfK = lK/2;
     
     cout << "Taille du noyau: " <<  lK << endl;
-    
+
+
+    Chrono lChrono(true);
+
     //Lecture du filtre
     double* lFilter = new double[lK*lK];
         
@@ -125,7 +129,11 @@ int main(int inArgc, char *inArgv[])
     //Sauvegarde de l'image dans un fichier sortie
     encode(lOutFilename.c_str(),  lImage, lWidth, lHeight);
 
+    lChrono.pause();
+
     cout << "L'image a été filtrée et enregistrée dans " << lOutFilename << " avec succès!" << endl;
+
+    cout << "\nTemps d'execution séquentiel = " << lChrono.get() << " sec\n";
 
     delete lFilter;
     return 0;
