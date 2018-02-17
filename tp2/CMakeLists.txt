@@ -8,11 +8,12 @@ add_executable(tp2
         PACC/config.hpp
         PACC/Tokenizer.cpp
         PACC/Tokenizer.hpp
-        Chrono.hpp
+        lib/Chrono.hpp
         exemple.png
-        lodepng.cpp
-        lodepng.h
+        lib/lodepng.cpp
+        lib/lodepng.h
         makefile
         noyau_flou
         noyau_identite
-        tp2.cpp)
+        tp2.cpp
+        )
