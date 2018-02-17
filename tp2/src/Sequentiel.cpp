@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../lib/lodepng.h"
 #include <iostream>
 #include <fstream>
@@ -86,7 +88,7 @@ void executerSequentiel(string iFilename, string iOutFilename, string noyau){
 
     cout << "L'image a été filtrée et enregistrée dans " << iOutFilename << " avec succès!" << endl;
 
-    cout << "Temps d'execution séquentiel = \033[1;31m" << lChrono.get() << " sec\033[1;31m" << endl;
+    cout << "Temps d'execution séquentiel = \033[1;31m" << lChrono.get() << " sec\033[0m" << endl;
 
     delete lFilter;
 

@@ -6,11 +6,11 @@
 //  Copyright 2015 Université Laval. Tous droits réservés.
 //
 
-
 #include "lib/lodepng.h"
 #include <iostream>
 
 #include "src/Sequentiel.cpp"
+#include "src/Parallele.cpp"
 
 using namespace std;
 
@@ -33,6 +33,9 @@ int main(int inArgc, char *inArgv[]) {
     else
         lOutFilename = "output.png";
 
-    executerSequentiel(lFilename, lOutFilename, noyau);
+    //executerSequentiel(lFilename, lOutFilename, noyau);
+    cout << "Temps d'execution séquentiel = \033[1;31m3.11816 ec\033[0m " << endl;
+
+    executerParallele(lFilename, lOutFilename, noyau);
 
 }

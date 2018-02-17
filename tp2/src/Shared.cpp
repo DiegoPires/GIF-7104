@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../lib/lodepng.h"
 #include <iostream>
 #include <stdlib.h>
