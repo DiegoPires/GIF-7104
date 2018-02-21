@@ -5,12 +5,13 @@
 //  Créé par Julien-Charles Lévesque
 //  Copyright 2015 Université Laval. Tous droits réservés.
 //
-
 #include "lib/lodepng.h"
 #include <iostream>
 
 #include "src/Sequentiel.cpp"
 #include "src/Parallele.cpp"
+
+#include "lib/Chrono.hpp"
 
 using namespace std;
 
@@ -36,6 +37,14 @@ int main(int inArgc, char *inArgv[]) {
     //executerSequentiel(lFilename, lOutFilename, noyau);
     cout << "Temps d'execution séquentiel = \033[1;31m3.11816 ec\033[0m " << endl;
 
-    executerParallele(lFilename, lOutFilename, noyau);
+    double tempsTotal = 0;
+    int iteration = 3;
+    for(int i = 0; i<iteration; i++) {
+        Chrono c = executerParallele(lFilename, lOutFilename, noyau);
+        tempsTotal+= c.get();
+    }
+    double tempsMoyen = (tempsTotal / iteration);
+
+    cout << "Temps d'execution parallele  = \033[1;31m" << tempsMoyen << " sec\033[0m" << endl;
 
 }

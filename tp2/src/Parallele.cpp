@@ -12,7 +12,7 @@
 
 using namespace std;
 
-void executerParallele(string iFilename, string iOutFilename, string noyau){
+Chrono executerParallele(string iFilename, string iOutFilename, string noyau){
 
     // Lire le noyau.
     ifstream lConfig;
@@ -43,15 +43,17 @@ void executerParallele(string iFilename, string iOutFilename, string noyau){
     unsigned int lWidth, lHeight;
     vector<unsigned char> lImage; //Les pixels bruts
 
-    #pragma omp parallel for schedule(static)
+    // Doesnt matter what we try here, it breaks the image sometimes
+    // #pragma omp parallel for // private(lToken) // schedule(auto) // collapse(2)
     for (int i = 0; i < lK; i++) {
         for (int j = 0; j < lK; j++) {
+            //#pragma omp atomic read
             lTok.getNextToken(lToken);
             lFilter[i * lK + j] = atof(lToken.c_str());
         }
     }
 
-   //Appeler lodepng
+    //Appeler lodepng
     decode(iFilename.c_str(), lImage, lWidth, lHeight);
 
     //Variables contenant des indices
@@ -68,8 +70,8 @@ void executerParallele(string iFilename, string iOutFilename, string noyau){
 
     //#pragma omp parallel for schedule(dynamic) shared(lImage, lWidth, lHeight) private(lR, lG, lB, fy, fx)
 
-    // Dynamic sees better?
-    //#pragma omp parallel for schedule(dynamic) collapse(2) shared(lImage, lWidth, lHeight) private(lR, lG, lB, fy, fx)
+    // collapse(2) breaks sometimes the image
+    #pragma omp parallel for schedule(static, 2) shared(lImage, lWidth, lHeight) private(lR, lG, lB, fy, fx)
     for(int x = lHalfK; x < maxWidth; x++)
     {
         for (int y = lHalfK; y < maxHeight; y++)
@@ -88,12 +90,12 @@ void executerParallele(string iFilename, string iOutFilename, string noyau){
                 for (int i = -lHalfK; i <= lHalfK; i++) {
                     fx = i + lHalfK;
 
-                        //#pragma omp atomic update
-                        lR += double(lImage[(y + j)*lWidth*4 + (x + i)*4]) * lFilter[fx + fy*lK];
-                        //#pragma omp atomic update
-                        lG += double(lImage[(y + j)*lWidth*4 + (x + i)*4 + 1]) * lFilter[fx + fy*lK];
-                        //#pragma omp atomic update
-                        lB += double(lImage[(y + j)*lWidth*4 + (x + i)*4 + 2]) * lFilter[fx + fy*lK];
+                    //#pragma omp atomic update
+                    lR += double(lImage[(y + j)*lWidth*4 + (x + i)*4]) * lFilter[fx + fy*lK];
+                    //#pragma omp atomic update
+                    lG += double(lImage[(y + j)*lWidth*4 + (x + i)*4 + 1]) * lFilter[fx + fy*lK];
+                    //#pragma omp atomic update
+                    lB += double(lImage[(y + j)*lWidth*4 + (x + i)*4 + 2]) * lFilter[fx + fy*lK];
 
                 }
             }
@@ -111,8 +113,10 @@ void executerParallele(string iFilename, string iOutFilename, string noyau){
 
     lChrono.pause();
 
-    cout << "L'image a été filtrée et enregistrée dans " << iOutFilename << " avec succès!" << endl;
+    //cout << "L'image a été filtrée et enregistrée dans " << iOutFilename << " avec succès!" << endl;
 
-    cout << "Temps d'execution parallele  = \033[1;31m" << lChrono.get() << " sec\033[0m" << endl;
+    //cout << "Temps d'execution parallele  = \033[1;31m" << lChrono.get() << " sec\033[0m" << endl;
+
+    return lChrono;
 
 }
