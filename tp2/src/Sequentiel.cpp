@@ -11,7 +11,7 @@
 
 using namespace std;
 
-void executerSequentiel(string iFilename, string iOutFilename, string noyau){
+Chrono executerSequentiel(string iFilename, string iOutFilename, string noyau){
 
     // Lire le noyau.
     ifstream lConfig;
@@ -33,11 +33,11 @@ void executerSequentiel(string iFilename, string iOutFilename, string noyau){
 
     // cout << "Taille du noyau: " <<  lK << endl;
 
-    Chrono lChrono(true);
-
     //Lecture du filtre
     double* lFilter;
     lFilter = new double[lK * lK];
+
+    Chrono lChrono(true);
 
     for (int i = 0; i < lK; i++) {
         for (int j = 0; j < lK; j++) {
@@ -51,7 +51,11 @@ void executerSequentiel(string iFilename, string iOutFilename, string noyau){
     unsigned int lWidth, lHeight;
     vector<unsigned char> lImage; //Les pixels bruts
     //Appeler lodepng
+
+    lChrono.pause();
     decode(iFilename.c_str(), lImage, lWidth, lHeight);
+
+    lChrono.resume();
 
     //Variables contenant des indices
     int fy, fx;
@@ -81,15 +85,19 @@ void executerSequentiel(string iFilename, string iOutFilename, string noyau){
         }
     }
 
+    lChrono.pause();
+
     //Sauvegarde de l'image dans un fichier sortie
     encode(iOutFilename.c_str(),  lImage, lWidth, lHeight);
 
-    lChrono.pause();
+    // lChrono.pause();
 
-    cout << "L'image a été filtrée et enregistrée dans " << iOutFilename << " avec succès!" << endl;
+    // cout << "L'image a été filtrée et enregistrée dans " << iOutFilename << " avec succès!" << endl;
 
-    cout << "Temps d'execution séquentiel = \033[1;31m" << lChrono.get() << " sec\033[0m" << endl;
+     cout << "Temps d'execution séquentiel = \033[1;31m" << lChrono.get() << " sec\033[0m" << endl;
 
     delete lFilter;
+
+    return lChrono;
 
 }

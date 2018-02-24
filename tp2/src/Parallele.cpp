@@ -24,18 +24,16 @@ Chrono executerParallele(string iFilename, string iOutFilename, string noyau){
     }
 
     PACC::Tokenizer lTok(lConfig);
-    lTok.setDelimiters(" \n","");
+    lTok.setDelimiters(" \n", "");
 
     string lToken;
     lTok.getNextToken(lToken);
 
     int lK = atoi(lToken.c_str());
-    int lHalfK = lK/2;
-
-    Chrono lChrono(true);
+    int lHalfK = lK / 2;
 
     //Lecture du filtre
-    double* lFilter;
+    double *lFilter;
     lFilter = new double[lK * lK];
 
     //Lecture de l'image
@@ -43,79 +41,89 @@ Chrono executerParallele(string iFilename, string iOutFilename, string noyau){
     unsigned int lWidth, lHeight;
     vector<unsigned char> lImage; //Les pixels bruts
 
-    // Doesnt matter what we try here, it breaks the image sometimes
-    // #pragma omp parallel for // private(lToken) // schedule(auto) // collapse(2)
-    for (int i = 0; i < lK; i++) {
-        for (int j = 0; j < lK; j++) {
-            //#pragma omp atomic read
-            lTok.getNextToken(lToken);
-            lFilter[i * lK + j] = atof(lToken.c_str());
-        }
-    }
+    Chrono lChrono(true);
 
-    //Appeler lodepng
-    decode(iFilename.c_str(), lImage, lWidth, lHeight);
-
-    //Variables contenant des indices
-    int fy, fx;
-    //Variables temporaires pour les canaux de l'image
-    double lR, lG, lB;
-
-    int maxWidth = (int)lWidth - lHalfK;
-    int maxHeight = (int)lHeight - lHalfK;
-
-    //omp_set_num_threads(maxWidth);
-
-    //#pragma omp parallel for schedule(dynamic) shared(lImage, lWidth, lHeight) private(lR, lG, lB, fy, fx)
-
-    //#pragma omp parallel for schedule(dynamic) shared(lImage, lWidth, lHeight) private(lR, lG, lB, fy, fx)
-
-    // collapse(2) breaks sometimes the image
-    #pragma omp parallel for schedule(static, 2) shared(lImage, lWidth, lHeight) private(lR, lG, lB, fy, fx)
-    for(int x = lHalfK; x < maxWidth; x++)
-    {
-        for (int y = lHalfK; y < maxHeight; y++)
-        {
-//#pragma omp atomic write
-            lR = 0.;
-//#pragma omp atomic write
-            lG = 0.;
-//#pragma omp atomic write
-            lB = 0.;
-
-            //This does not work at all - 40 sec +/-
-            //#pragma omp parallel for schedule(dynamic) shared(lImage, lWidth, lHeight)
-            for (int j = -lHalfK; j <= lHalfK; j++) {
-                fy = j + lHalfK;
-                for (int i = -lHalfK; i <= lHalfK; i++) {
-                    fx = i + lHalfK;
-
-                    //#pragma omp atomic update
-                    lR += double(lImage[(y + j)*lWidth*4 + (x + i)*4]) * lFilter[fx + fy*lK];
-                    //#pragma omp atomic update
-                    lG += double(lImage[(y + j)*lWidth*4 + (x + i)*4 + 1]) * lFilter[fx + fy*lK];
-                    //#pragma omp atomic update
-                    lB += double(lImage[(y + j)*lWidth*4 + (x + i)*4 + 2]) * lFilter[fx + fy*lK];
-
-                }
+    //#pragma omp parallel num_threads(4) private(lWidth, lHeight, lImage, lFilter, lTok, lK)
+    //{
+        // Doesnt matter what we try here, it breaks the image sometimes
+        //#pragma omp parallel for // private(lToken) // schedule(auto) // collapse(2)
+        #pragma omp for  // ordered //
+        for (int i = 0; i < lK; i++) {
+            for (int j = 0; j < lK; j++) {
+                //#pragma omp atomic read
+                lTok.getNextToken(lToken);
+                lFilter[i * lK + j] = atof(lToken.c_str());
             }
-            //Placer le résultat dans l'image.
-            lImage[y*lWidth*4 + x*4] = (unsigned char)lR;
-            lImage[y*lWidth*4 + x*4 + 1] = (unsigned char)lG;
-            lImage[y*lWidth*4 + x*4 + 2] = (unsigned char)lB;
         }
-    }
-
-    //Sauvegarde de l'image dans un fichier sortie
-    encode(iOutFilename.c_str(),  lImage, lWidth, lHeight);
-
-    delete lFilter;
 
     lChrono.pause();
 
-    //cout << "L'image a été filtrée et enregistrée dans " << iOutFilename << " avec succès!" << endl;
+        //Appeler lodepng
+        decode(iFilename.c_str(), lImage, lWidth, lHeight);
 
-    //cout << "Temps d'execution parallele  = \033[1;31m" << lChrono.get() << " sec\033[0m" << endl;
+    lChrono.resume();
+
+        //Variables contenant des indices
+        int fy, fx;
+        //Variables temporaires pour les canaux de l'image
+        double lR, lG, lB;
+
+        int maxWidth = (int) lWidth - lHalfK;
+        int maxHeight = (int) lHeight - lHalfK;
+
+        //omp_set_num_threads(maxWidth);
+
+        //#pragma omp parallel for schedule(dynamic) shared(lImage, lWidth, lHeight) private(lR, lG, lB, fy, fx)
+
+        //#pragma omp parallel for schedule(dynamic) shared(lImage, lWidth, lHeight) private(lR, lG, lB, fy, fx)
+
+        // collapse(2) breaks sometimes the image
+        //#pragma omp parallel for schedule(static, 2) shared(lImage, lWidth, lHeight) private(lR, lG, lB, fy, fx)
+        for (int x = lHalfK; x < maxWidth; x++) {
+            for (int y = lHalfK; y < maxHeight; y++) {
+                //#pragma omp atomic write
+                lR = 0.;
+                //#pragma omp atomic write
+                lG = 0.;
+                //#pragma omp atomic write
+                lB = 0.;
+
+                //This does not work at all - 40 sec +/-
+                //#pragma omp parallel for schedule(dynamic) shared(lImage, lWidth, lHeight)
+                for (int j = -lHalfK; j <= lHalfK; j++) {
+                    fy = j + lHalfK;
+                    for (int i = -lHalfK; i <= lHalfK; i++) {
+                        fx = i + lHalfK;
+
+                        //#pragma omp atomic update
+                        lR += double(lImage[(y + j) * lWidth * 4 + (x + i) * 4]) * lFilter[fx + fy * lK];
+                        //#pragma omp atomic update
+                        lG += double(lImage[(y + j) * lWidth * 4 + (x + i) * 4 + 1]) * lFilter[fx + fy * lK];
+                        //#pragma omp atomic update
+                        lB += double(lImage[(y + j) * lWidth * 4 + (x + i) * 4 + 2]) * lFilter[fx + fy * lK];
+
+                    }
+                }
+                //Placer le résultat dans l'image.
+                lImage[y * lWidth * 4 + x * 4] = (unsigned char) lR;
+                lImage[y * lWidth * 4 + x * 4 + 1] = (unsigned char) lG;
+                lImage[y * lWidth * 4 + x * 4 + 2] = (unsigned char) lB;
+            }
+        }
+
+        lChrono.pause();
+
+        //Sauvegarde de l'image dans un fichier sortie
+        encode(iOutFilename.c_str(), lImage, lWidth, lHeight);
+
+        delete lFilter;
+
+        //lChrono.pause();
+
+        //cout << "L'image a été filtrée et enregistrée dans " << iOutFilename << " avec succès!" << endl;
+
+        cout << "Temps d'execution parallele  = \033[1;31m" << lChrono.get() << " sec\033[0m" << endl;
+    //}
 
     return lChrono;
 

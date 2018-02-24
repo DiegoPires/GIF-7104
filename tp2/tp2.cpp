@@ -29,22 +29,32 @@ int main(int inArgc, char *inArgv[]) {
     string noyau = inArgv[2];
     string lOutFilename;
 
+    Chrono c;
+
     if (inArgc == 4)
         lOutFilename = inArgv[3];
     else
         lOutFilename = "output.png";
 
-    //executerSequentiel(lFilename, lOutFilename, noyau);
-    cout << "Temps d'execution séquentiel = \033[1;31m3.11816 ec\033[0m " << endl;
+    double tempsTotalParallele = 0;
+    double tempsTotalSequentielle = 0;
 
-    double tempsTotal = 0;
-    int iteration = 3;
+    int iteration = 2;
     for(int i = 0; i<iteration; i++) {
-        Chrono c = executerParallele(lFilename, lOutFilename, noyau);
-        tempsTotal+= c.get();
-    }
-    double tempsMoyen = (tempsTotal / iteration);
+        string lOutFile = lOutFilename; // to_string(i).append("_").append(lOutFilename);
 
-    cout << "Temps d'execution parallele  = \033[1;31m" << tempsMoyen << " sec\033[0m" << endl;
+        c = executerSequentiel(lFilename, lOutFile, noyau);
+        tempsTotalSequentielle+= c.get();
+        // cout << "Temps d'execution séquentiel = \033[1;31m3.35089 ec\033[0m " << endl;
+
+        c = executerParallele(lFilename, lOutFile, noyau);
+        tempsTotalParallele+= c.get();
+    }
+
+    double tempsMoyenSeq = (tempsTotalSequentielle / iteration);
+    double tempsMoyenPar = (tempsTotalParallele / iteration);
+
+    cout << "Temps d'execution séquentiel moyen = \033[1;31m" << tempsMoyenSeq << " sec\033[0m" << endl;
+    cout << "Temps d'execution parallele moyen  = \033[1;31m" << tempsMoyenPar << " sec\033[0m" << endl;
 
 }
