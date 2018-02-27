@@ -43,19 +43,22 @@ Chrono executerParallele(string iFilename, string iOutFilename, string noyau){
 
     Chrono lChrono(true);
 
+    // Ce premier pragma ne marche jamais, ca compile, mais ca s'execute pas
     //#pragma omp parallel num_threads(4) private(lWidth, lHeight, lImage, lFilter, lTok, lK)
     //{
-        // Doesnt matter what we try here, it breaks the image sometimes
+        // Tout les options, sauf ordered brise l'image final des fois
         //#pragma omp parallel for // private(lToken) // schedule(auto) // collapse(2)
         #pragma omp for ordered //
         for (int i = 0; i < lK; i++) {
             for (int j = 0; j < lK; j++) {
+                // ca ne marche pas, sauf pour les assignations de valeur tout de suite apres
                 //#pragma omp atomic read
                 lTok.getNextToken(lToken);
                 lFilter[i * lK + j] = atof(lToken.c_str());
             }
         }
 
+        // on compte pas l'appele a lodepng pour nous temps d'execution
         lChrono.pause();
 
         //Appeler lodepng

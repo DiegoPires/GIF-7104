@@ -21,6 +21,7 @@ void usage(char* inName) {
     exit(1);
 }
 
+// Une petite refactoration du code a été fait juste pour facilier sa lecture
 int main(int inArgc, char *inArgv[]) {
 
     if (inArgc < 3 or inArgc > 4) usage(inArgv[0]);
@@ -36,25 +37,28 @@ int main(int inArgc, char *inArgv[]) {
     else
         lOutFilename = "output.png";
 
-    double tempsTotalParallele = 0;
-    double tempsTotalSequentielle = 0;
+    //double tempsTotalParallele = 0;
+    //double tempsTotalSequentielle = 0;
 
-    int iteration = 10;
-    for(int i = 0; i<iteration; i++) {
-        string lOutFile = lOutFilename; // to_string(i).append("_").append(lOutFilename);
+    // La boucle FOR est commenté, parce que ca sers juste pour le test de performance
+    //int iteration = 1;
+    //for(int i = 0; i<iteration; i++) {
 
-        c = executerSequentiel(lFilename, lOutFile, noyau);
-        tempsTotalSequentielle+= c.get();
-        // cout << "Temps d'execution séquentiel = \033[1;31m3.35089 ec\033[0m " << endl;
+    // Si vous voulez generer des fichier avec des noms differents dans le cas de la boucle
+    string lOutFile = lOutFilename; // to_string(i).append("_").append(lOutFilename);
 
-        c = executerParallele(lFilename, lOutFile, noyau);
-        tempsTotalParallele+= c.get();
-    }
+    c = executerSequentiel(lFilename, lOutFile, noyau);
 
-    double tempsMoyenSeq = (tempsTotalSequentielle / iteration);
-    double tempsMoyenPar = (tempsTotalParallele / iteration);
+    //tempsTotalSequentielle+= c.get();
 
-    cout << "Temps d'execution séquentiel moyen = \033[1;31m" << tempsMoyenSeq << " sec\033[0m" << endl;
-    cout << "Temps d'execution parallele moyen  = \033[1;31m" << tempsMoyenPar << " sec\033[0m" << endl;
+    c = executerParallele(lFilename, lOutFile, noyau);
+    //tempsTotalParallele+= c.get();
+    //}
+
+    //double tempsMoyenSeq = (tempsTotalSequentielle / iteration);
+    //double tempsMoyenPar = (tempsTotalParallele / iteration);
+
+    //cout << "Temps d'execution séquentiel moyen = \033[1;31m" << tempsMoyenSeq << " sec\033[0m" << endl;
+    //cout << "Temps d'execution parallele moyen  = \033[1;31m" << tempsMoyenPar << " sec\033[0m" << endl;
 
 }
