@@ -47,7 +47,7 @@ Chrono executerParallele(string iFilename, string iOutFilename, string noyau){
     //{
         // Doesnt matter what we try here, it breaks the image sometimes
         //#pragma omp parallel for // private(lToken) // schedule(auto) // collapse(2)
-        #pragma omp for  // ordered //
+        #pragma omp for ordered //
         for (int i = 0; i < lK; i++) {
             for (int j = 0; j < lK; j++) {
                 //#pragma omp atomic read
@@ -56,12 +56,12 @@ Chrono executerParallele(string iFilename, string iOutFilename, string noyau){
             }
         }
 
-    lChrono.pause();
+        lChrono.pause();
 
         //Appeler lodepng
         decode(iFilename.c_str(), lImage, lWidth, lHeight);
 
-    lChrono.resume();
+        lChrono.resume();
 
         //Variables contenant des indices
         int fy, fx;
@@ -78,7 +78,7 @@ Chrono executerParallele(string iFilename, string iOutFilename, string noyau){
         //#pragma omp parallel for schedule(dynamic) shared(lImage, lWidth, lHeight) private(lR, lG, lB, fy, fx)
 
         // collapse(2) breaks sometimes the image
-        //#pragma omp parallel for schedule(static, 2) shared(lImage, lWidth, lHeight) private(lR, lG, lB, fy, fx)
+        #pragma omp parallel for schedule(static, 2) shared(lImage, lWidth, lHeight) private(lR, lG, lB, fy, fx)
         for (int x = lHalfK; x < maxWidth; x++) {
             for (int y = lHalfK; y < maxHeight; y++) {
                 //#pragma omp atomic write

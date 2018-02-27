@@ -39,7 +39,7 @@ int main(int inArgc, char *inArgv[]) {
     double tempsTotalParallele = 0;
     double tempsTotalSequentielle = 0;
 
-    int iteration = 2;
+    int iteration = 10;
     for(int i = 0; i<iteration; i++) {
         string lOutFile = lOutFilename; // to_string(i).append("_").append(lOutFilename);
 
