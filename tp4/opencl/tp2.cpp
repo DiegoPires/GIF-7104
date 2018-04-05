@@ -47,7 +47,7 @@ int main(int inArgc, char *inArgv[]) {
     // Si vous voulez generer des fichier avec des noms differents dans le cas de la boucle
     string lOutFile = lOutFilename; // to_string(i).append("_").append(lOutFilename);
 
-    c = executerSequentiel(lFilename, lOutFile, noyau);
+    //c = executerSequentiel(lFilename, lOutFile, noyau);
 
     //tempsTotalSequentielle+= c.get();
 

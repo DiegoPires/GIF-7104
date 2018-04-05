@@ -7,127 +7,122 @@
 #include "../lib/Chrono.hpp"
 #include "../PACC/Tokenizer.hpp"
 
+#ifdef __APPLE__
+#include <OpenCL/opencl.h>
+#else
+#include <CL/cl.hpp>
+#endif
+
 #include "Shared.cpp"
 
 using namespace std;
 
+#define MAX_SOURCE_SIZE (0x100000)
+
 Chrono executerParallele(string iFilename, string iOutFilename, string noyau){
-
-    // Lire le noyau.
-    ifstream lConfig;
-
-    lConfig.open(noyau);
-    if (!lConfig.is_open()) {
-        cerr << "Le fichier noyau fourni (" << noyau << ") est invalide." << endl;
-        exit(1);
-    }
-
-    PACC::Tokenizer lTok(lConfig);
-    lTok.setDelimiters(" \n", "");
-
-    string lToken;
-    lTok.getNextToken(lToken);
-
-    int lK = atoi(lToken.c_str());
-    int lHalfK = lK / 2;
-
-    //Lecture du filtre
-    double *lFilter;
-    lFilter = new double[lK * lK];
-
-    //Lecture de l'image
-    //Variables à remplir
-    unsigned int lWidth, lHeight;
-    vector<unsigned char> lImage; //Les pixels bruts
-
+    
     Chrono lChrono(true);
 
-    // Ce premier pragma ne marche jamais, ca compile, mais ca s'execute pas
-    //#pragma omp parallel num_threads(4) private(lWidth, lHeight, lImage, lFilter, lTok, lK)
-    //{
-    // Tout les options, sauf ordered brise l'image final des fois
-    //#pragma omp parallel for // private(lToken) // schedule(auto) // collapse(2)
-    //#pragma omp for ordered //
-    for (int i = 0; i < lK; i++) {
-        for (int j = 0; j < lK; j++) {
-            // ca ne marche pas, sauf pour les assignations de valeur tout de suite apres
-            //#pragma omp atomic read
-            lTok.getNextToken(lToken);
-            lFilter[i * lK + j] = atof(lToken.c_str());
-        }
+    int i;
+    const int LIST_SIZE = 1024;
+    int *A = (int*)malloc(sizeof(int)*LIST_SIZE);
+    int *B = (int*)malloc(sizeof(int)*LIST_SIZE);
+    for(i = 0; i < LIST_SIZE; i++) {
+        A[i] = i;
+        B[i] = LIST_SIZE - i;
     }
 
-    // on compte pas l'appele a lodepng pour nous temps d'execution
-    lChrono.pause();
+    // Load the kernel source code into the array source_str
+    FILE *fp;
+    char *source_str;
+    size_t source_size;
 
-    //Appeler lodepng
-    decode(iFilename.c_str(), lImage, lWidth, lHeight);
-
-    lChrono.resume();
-
-    //Variables contenant des indices
-    int fy, fx;
-    //Variables temporaires pour les canaux de l'image
-    double lR, lG, lB;
-
-    int maxWidth = (int) lWidth - lHalfK;
-    int maxHeight = (int) lHeight - lHalfK;
-
-    //omp_set_num_threads(maxWidth);
-
-    //#pragma omp parallel for schedule(dynamic) shared(lImage, lWidth, lHeight) private(lR, lG, lB, fy, fx)
-
-    //#pragma omp parallel for schedule(dynamic) shared(lImage, lWidth, lHeight) private(lR, lG, lB, fy, fx)
-
-    // collapse(2) breaks sometimes the image
-    //#pragma omp parallel for schedule(static, 2) shared(lImage, lWidth, lHeight) private(lR, lG, lB, fy, fx)
-    for (int x = lHalfK; x < maxWidth; x++) {
-        for (int y = lHalfK; y < maxHeight; y++) {
-            //#pragma omp atomic write
-            lR = 0.;
-            //#pragma omp atomic write
-            lG = 0.;
-            //#pragma omp atomic write
-            lB = 0.;
-
-            //This does not work at all - 40 sec +/-
-            //#pragma omp parallel for schedule(dynamic) shared(lImage, lWidth, lHeight)
-            for (int j = -lHalfK; j <= lHalfK; j++) {
-                fy = j + lHalfK;
-
-                //#pragma omp reduction(+:lR, lG, lB) private(fx)
-                for (int i = -lHalfK; i <= lHalfK; i++) {
-                    fx = i + lHalfK;
-
-                    //#pragma omp atomic update
-                    lR += double(lImage[(y + j) * lWidth * 4 + (x + i) * 4]) * lFilter[fx + fy * lK];
-                    //#pragma omp atomic update
-                    lG += double(lImage[(y + j) * lWidth * 4 + (x + i) * 4 + 1]) * lFilter[fx + fy * lK];
-                    //#pragma omp atomic update
-                    lB += double(lImage[(y + j) * lWidth * 4 + (x + i) * 4 + 2]) * lFilter[fx + fy * lK];
-
-                }
-            }
-            //Placer le résultat dans l'image.
-            lImage[y * lWidth * 4 + x * 4] = (unsigned char) lR;
-            lImage[y * lWidth * 4 + x * 4 + 1] = (unsigned char) lG;
-            lImage[y * lWidth * 4 + x * 4 + 2] = (unsigned char) lB;
-        }
+    fp = fopen("src/mykernel.cl", "r");
+    if (!fp) {
+        fprintf(stderr, "Failed to load kernel.\n");
+        exit(1);
     }
+    source_str = (char*)malloc(MAX_SOURCE_SIZE);
+    source_size = fread( source_str, 1, MAX_SOURCE_SIZE, fp);
+    fclose( fp );
+
+    // Get platform and device information
+    cl_platform_id platform_id = NULL;
+    cl_device_id device_id = NULL;
+    cl_uint ret_num_devices;
+    cl_uint ret_num_platforms;
+    cl_int ret = clGetPlatformIDs(1, &platform_id, &ret_num_platforms);
+    ret = clGetDeviceIDs( platform_id, CL_DEVICE_TYPE_DEFAULT, 1,
+                          &device_id, &ret_num_devices);
+
+    // Create an OpenCL context
+    cl_context context = clCreateContext( NULL, 1, &device_id, NULL, NULL, &ret);
+
+    // Create a command queue
+    cl_command_queue command_queue = clCreateCommandQueue(context, device_id, 0, &ret);
+
+    // Create memory buffers on the device for each vector
+    cl_mem a_mem_obj = clCreateBuffer(context, CL_MEM_READ_ONLY,
+                                      LIST_SIZE * sizeof(int), NULL, &ret);
+    cl_mem b_mem_obj = clCreateBuffer(context, CL_MEM_READ_ONLY,
+                                      LIST_SIZE * sizeof(int), NULL, &ret);
+    cl_mem c_mem_obj = clCreateBuffer(context, CL_MEM_WRITE_ONLY,
+                                      LIST_SIZE * sizeof(int), NULL, &ret);
+
+    // Copy the lists A and B to their respective memory buffers
+    ret = clEnqueueWriteBuffer(command_queue, a_mem_obj, CL_TRUE, 0,
+                               LIST_SIZE * sizeof(int), A, 0, NULL, NULL);
+    ret = clEnqueueWriteBuffer(command_queue, b_mem_obj, CL_TRUE, 0,
+                               LIST_SIZE * sizeof(int), B, 0, NULL, NULL);
+
+    // Create a program from the kernel source
+    cl_program program = clCreateProgramWithSource(context, 1,
+                                                   (const char **)&source_str, (const size_t *)&source_size, &ret);
+
+    // Build the program
+    ret = clBuildProgram(program, 1, &device_id, NULL, NULL, NULL);
+
+    // Create the OpenCL kernel
+    cl_kernel kernel = clCreateKernel(program, "vector_add", &ret);
+
+    // Set the arguments of the kernel
+    ret = clSetKernelArg(kernel, 0, sizeof(cl_mem), (void *)&a_mem_obj);
+    ret = clSetKernelArg(kernel, 1, sizeof(cl_mem), (void *)&b_mem_obj);
+    ret = clSetKernelArg(kernel, 2, sizeof(cl_mem), (void *)&c_mem_obj);
+
+    // Execute the OpenCL kernel on the list
+    size_t global_item_size = LIST_SIZE; // Process the entire lists
+    size_t local_item_size = 64; // Divide work items into groups of 64
+    ret = clEnqueueNDRangeKernel(command_queue, kernel, 1, NULL,
+                                 &global_item_size, &local_item_size, 0, NULL, NULL);
+
+    // Read the memory buffer C on the device to the local variable C
+    int *C = (int*)malloc(sizeof(int)*LIST_SIZE);
+    ret = clEnqueueReadBuffer(command_queue, c_mem_obj, CL_TRUE, 0,
+                              LIST_SIZE * sizeof(int), C, 0, NULL, NULL);
+
+    // Display the result to the screen
+    for(i = 0; i < LIST_SIZE; i++)
+        printf("%d + %d = %d\n", A[i], B[i], C[i]);
+
+    // Clean up
+    ret = clFlush(command_queue);
+    ret = clFinish(command_queue);
+    ret = clReleaseKernel(kernel);
+    ret = clReleaseProgram(program);
+    ret = clReleaseMemObject(a_mem_obj);
+    ret = clReleaseMemObject(b_mem_obj);
+    ret = clReleaseMemObject(c_mem_obj);
+    ret = clReleaseCommandQueue(command_queue);
+    ret = clReleaseContext(context);
+    free(A);
+    free(B);
+    free(C);
+    return 0;
 
     lChrono.pause();
 
-    //Sauvegarde de l'image dans un fichier sortie
-    encode(iOutFilename.c_str(), lImage, lWidth, lHeight);
 
-    delete lFilter;
-
-    //lChrono.pause();
-
-    //cout << "L'image a été filtrée et enregistrée dans " << iOutFilename << " avec succès!" << endl;
-
-    cout << "Temps d'execution parallele  = \033[1;31m" << lChrono.get() << " sec\033[0m" << endl;
-    //}
 
     return lChrono;
 
