@@ -1,13 +1,13 @@
 #pragma once
 
-#include <omp.h>
+//#include <omp.h>
 
 #include "../lib/Chrono.hpp"
 #include "Shared.cpp"
 
 using namespace std;
 
-Chrono executerParallele(){
+Chrono executerParallele(int dimension, double seuil, int iterations, int coeur, string fichier){
 
 
     Chrono lChrono(true);

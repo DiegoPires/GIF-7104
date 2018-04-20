@@ -76,11 +76,11 @@ int main(int argc, char *argv[]) {
 
     // Si vous voulez generer des fichier avec des noms differents dans le cas de la boucle
 
-    c = executerSequentiel();
+    c = executerSequentiel(dimension, seuil, iterations, coeur, fichier);
 
     //tempsTotalSequentielle+= c.get();
 
-    c = executerParallele();
+    c = executerParallele(dimension, seuil, iterations, coeur, fichier);
     //tempsTotalParallele+= c.get();
     //}
 
