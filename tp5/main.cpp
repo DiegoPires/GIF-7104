@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
     int opt = 0;
 
     int dimension = 100;
-    double seuil = pow(10, -2);
+    double seuil = 1.35335283237; //pow(10, -2);
     int iterations = 1;
     int coeur = 1;
 

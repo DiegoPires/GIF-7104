@@ -12,4 +12,5 @@ add_executable(main
         lib/Chrono.hpp
         makefile
         main.cpp
+        src/input/init5.txt
         )
