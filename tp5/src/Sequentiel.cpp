@@ -74,51 +74,65 @@ Chrono executerSequentiel(int d, double seuil, int iterations, int coeur, const 
     double newData = 0;
     bool stopSeuil = false;
 
-    int iteration = 0;
+    int iteration = 1;
 
     while (!stopSeuil) {
-
-        iteration++;
+    // while (iteration <= 10) {
 
         // Pas calculer les border
-        for (int i=1; i < d - 2; i++) {
+        for (int i=1; i < d - 1; i++) {
+
+            int oddLineStart = i % 2 == 0 ? 1 : 2;
+            int evenLineStart = i % 2 == 0 ? 2 : 1;
 
             // Red sweep.
             //#pragma omp parallel for shared(u, d, original, stopSeuil, i) private(j)
-            for (int j = 1; j < d-2; j+=2)
+            for (int j = oddLineStart; j < d-1; j+=2)
             {
-                // cout << "---" << u[i][j] << "\n";
-                // cout <<  u[i][j-1] << " + " << u[i-1][j] << " + " << u[i][j+1] << " + " << u[i+1][j] << "\n";
-                // cout << u[i][j-1]+u[i-1][j]+u[i][j+1]+u[i+1][j] << "\n";
-                // cout << 0.25*(u[i][j-1]+u[i-1][j]+u[i][j+1]+u[i+1][j]) << "\n";
+                // cout << "--- Original: " << i << j << " - " << u[i][j] << "\n";
+                // cout << "--- Valeurs: "<<  u[i][j-1] << " + " << u[i-1][j] << " + " << u[i][j+1] << " + " << u[i+1][j] << "\n";
+                // cout << "--- Somme: "<< u[i][j-1]+u[i-1][j]+u[i][j+1]+u[i+1][j] << "\n";
+                // cout << "--- Final: "<< 0.25*(u[i][j-1]+u[i-1][j]+u[i][j+1]+u[i+1][j]) << "\n\n";
 
-                u[i][j] = (u[i][j-1]+u[i-1][j]+u[i][j+1]+u[i+1][j]); // 0.25*
+                u[i][j] = 0.25*(u[i][j-1]+u[i-1][j]+u[i][j+1]+u[i+1][j]);
 
-                //cout << "---" << u[i][j] << "\n\n";
+                // cout << "---" << u[i][j] << "\n\n";
 
-                if (u[i][j] - originalU[i][j] >= seuil)
+                if ( u[i][j]  <= seuil) // originalU[i][j] -
                 {
+
+                    //cout << "+++" << u[i][j] << "\n";
+                    //cout << "+++" << originalU[i][j] << "\n";
+                    //cout << "++" << originalU[i][j] - u[i][j] << "\n";
                     stopSeuil = true;
                 }
             }
 
             // Black sweep.
             //#pragma omp parallel for shared(u, d, original, stopSeuil, i) private(j)
-            for (int j = 2; j < d-2; j+=2)
+            for (int j = evenLineStart; j < d-1; j+=2)
             {
                 u[i][j] = 0.25*(u[i][j-1]+u[i-1][j]+u[i][j+1]+u[i+1][j]);
 
-                if (u[i][j] - originalU[i][j] >= seuil)
+                if (u[i][j]  <= seuil) // originalU[i][j] -
                 {
+                    //cout << "---" << u[i][j] << "\n";
+                    //cout << "---" << originalU[i][j] << "\n";
+                    //cout << u[i][j] - originalU[i][j] << "\n";
+                    //cout << "--" << originalU[i][j] - u[i][j] << "\n";
                     stopSeuil = true;
                 }
             }
         }
 
+
         if (iteration % iterations == 0) {
             print_output(u, d);
         }
 
+        iteration++;
+
+        cout << "****** \n\n";
     }
 
     // print between each "iterations"

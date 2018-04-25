@@ -31,7 +31,9 @@ int main(int argc, char *argv[]) {
     int iterations = 1;
     int coeur = 1;
 
-    while ((opt = getopt(argc, argv, "d:s:i:c:f:")) != -1) {
+    bool createFile = false;
+
+    while ((opt = getopt(argc, argv, "d:s:i:c:f:t:")) != -1) {
         switch(opt) {
             case 'd':
                 if(optarg) dimension = atoi(optarg);
@@ -48,10 +50,27 @@ int main(int argc, char *argv[]) {
             case 'f':
                 if(optarg) fichier = optarg;
                 break;
+            case 't':
+                if(optarg) createFile = true;
+                break;
             case '?':
                 cout << "\nParametre incorrect";
                 exit(1);
         }
+    }
+
+    if (createFile) {
+        string fileName = "src/input/init" + std::to_string(dimension) + ".txt";
+        std::ofstream outfile (fileName);
+
+        for(int i=1; i<dimension-1;i++){
+            for (int j=1; j<dimension-1; j++){
+                double randomValue = rand()%((100 - 20) + 1) + 10;
+                outfile << std::to_string(i) << " " << std::to_string(j) << " " << randomValue << std::endl;
+            }
+        }
+
+        outfile.close();
     }
 
     if (fichier == "") {
@@ -65,7 +84,7 @@ int main(int argc, char *argv[]) {
     cout << "\nCoeur=" << coeur;
     cout << "\nFichier=" << fichier;
 
-    cout<<"\n\n";
+    cout << "\n\n";
 
     //double tempsTotalParallele = 0;
     //double tempsTotalSequentielle = 0;
