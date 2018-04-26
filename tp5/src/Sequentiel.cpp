@@ -36,7 +36,6 @@ Chrono executerSequentiel(int d, double seuil, int iterations, int coeur, const 
             int evenLineStart = i % 2 == 0 ? 2 : 1;
 
             // Red sweep.
-            //#pragma omp parallel for shared(u, d, original, stopSeuil, i) private(j)
             for (int j = oddLineStart; j < d-1; j+=2)
             {
                 u[i][j] = 0.25*(u[i][j-1]+u[i-1][j]+u[i][j+1]+u[i+1][j]);
@@ -48,7 +47,6 @@ Chrono executerSequentiel(int d, double seuil, int iterations, int coeur, const 
             }
 
             // Black sweep.
-            //#pragma omp parallel for shared(u, d, original, stopSeuil, i) private(j)
             for (int j = evenLineStart; j < d-1; j+=2)
             {
                 u[i][j] = 0.25*(u[i][j-1]+u[i-1][j]+u[i][j+1]+u[i+1][j]);
