@@ -17,7 +17,32 @@
 
 using namespace std;
 
-// Une petite refactoration du code a été fait juste pour facilier sa lecture
+void showHelp(){
+    cout << "main <command>\n\n";
+    cout << "-h       help\n";
+    cout << "-f       path of the initialization matrix - Ex: 'src/input/init100.txt'\n";
+    cout << "-s       threshold indicating when to stop the process\n";
+    cout << "-i       between how many iterations we should generate an output\n";
+    cout << "-c       how many process to use in the parallelisation\n";
+    cout << "-t       creates a new file with the dimension provided and overwrite the -f parameter with the file created\n";
+}
+
+string createInitializationFile(int dimension){
+    string fileName = "src/input/init" + std::to_string(dimension) + ".txt";
+    std::ofstream outfile (fileName);
+
+    for(int i=1; i<dimension-1;i++){
+        for (int j=1; j<dimension-1; j++){
+            double randomValue = rand()%((100 - 20) + 1) + 10;
+            outfile << std::to_string(i) << " " << std::to_string(j) << " " << randomValue << std::endl;
+        }
+    }
+
+    outfile.close();
+
+    return fileName;
+}
+
 int main(int argc, char *argv[]) {
 
     Chrono c;
@@ -33,7 +58,7 @@ int main(int argc, char *argv[]) {
 
     bool createFile = false;
 
-    while ((opt = getopt(argc, argv, "d:s:i:c:f:t:")) != -1) {
+    while ((opt = getopt(argc, argv, "d:s:i:c:f:t:h:")) != -1) {
         switch(opt) {
             case 'd':
                 if(optarg) dimension = atoi(optarg);
@@ -56,21 +81,15 @@ int main(int argc, char *argv[]) {
             case '?':
                 cout << "\nParametre incorrect";
                 exit(1);
+            case 'h':
+                showHelp();
+                exit(1);
         }
     }
 
     if (createFile) {
-        string fileName = "src/input/init" + std::to_string(dimension) + ".txt";
-        std::ofstream outfile (fileName);
-
-        for(int i=1; i<dimension-1;i++){
-            for (int j=1; j<dimension-1; j++){
-                double randomValue = rand()%((100 - 20) + 1) + 10;
-                outfile << std::to_string(i) << " " << std::to_string(j) << " " << randomValue << std::endl;
-            }
-        }
-
-        outfile.close();
+        string fileName = createInitializationFile(dimension);
+        fichier = &fileName[0u];;
     }
 
     if (fichier == "") {
@@ -78,6 +97,7 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
+    cout << "** Parametres";
     cout << "\nDimension=" << dimension;
     cout << "\nSeuil=" << seuil;
     cout << "\nIterations=" << iterations;

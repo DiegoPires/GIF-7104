@@ -18,7 +18,9 @@ Chrono executerParallele(int dimension, double seuil, int iterations, int coeur,
 
     lChrono.pause();
 
-    cout << "Temps d'execution parallele = \033[1;31m" << lChrono.get() << " sec\033[0m" << endl;
+    if(coeur == 1) {
+        cout << "Temps d'execution parallele = \033[1;31m" << lChrono.get() << " sec\033[0m" << endl;
+    }
 
     return lChrono;
 
