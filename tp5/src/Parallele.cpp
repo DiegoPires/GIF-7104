@@ -1,6 +1,6 @@
 #pragma once
 
-//#include <omp.h>
+#include <omp.h>
 
 #include "../lib/Chrono.hpp"
 #include "Shared.cpp"
@@ -30,9 +30,11 @@ Chrono executerParallele(int d, double seuil, int iterations, int coeur, const s
 
     int iterationCount = 1;
 
+    omp_set_num_threads(coeur);
+
     while (!stopSeuil) {
 
-        //#pragma omp parallel num_threads(2)
+        #pragma omp parallel
         for (int i=1; i < d - 1; i++) {
 
             int oddLineStart = i % 2 == 0 ? 1 : 2;

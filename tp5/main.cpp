@@ -12,7 +12,6 @@
 
 #include "lib/Chrono.hpp"
 
-#include <math.h>
 #include <unistd.h>
 
 using namespace std;
@@ -25,6 +24,7 @@ void showHelp(){
     cout << "-i       between how many iterations we should generate an output\n";
     cout << "-c       how many process to use in the parallelisation\n";
     cout << "-t       creates a new file with the dimension provided and overwrite the -f parameter with the file created\n";
+    cout << "-p       ignores all the other parameters and run a performance test\n";
 }
 
 string createInitializationFile(int dimension){
@@ -101,18 +101,21 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    cout << "** Parametres";
-    cout << "\nDimension=" << dimension;
-    cout << "\nSeuil=" << seuil;
-    cout << "\nIterations=" << iterations;
-    cout << "\nCoeur=" << coeur;
-    cout << "\nFichier=" << fichier;
-
-    cout << "\n\n";
-
     if (!performanceTest) {
+        cout << "** Parametres d'entre";
+        cout << "\nDimension=" << dimension;
+        cout << "\nSeuil=" << seuil;
+        cout << "\nIterations=" << iterations;
+        cout << "\nCoeur=" << coeur;
+        cout << "\nFichier=" << fichier;
+
+        cout << "\n\n";
+
         executerSequentiel(dimension, seuil, iterations, coeur, fichier, performanceTest);
         executerParallele(dimension, seuil, iterations, coeur, fichier, performanceTest);
+    }
+    else {
+
     }
     //double tempsTotalParallele = 0;
     //double tempsTotalSequentielle = 0;
