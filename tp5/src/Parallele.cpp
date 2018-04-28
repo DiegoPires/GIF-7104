@@ -17,7 +17,7 @@
 
 using namespace std;
 
-Chrono executerParallele(int d, double seuil, int iterations, int coeur, const std::string& fichier) {
+Chrono executerParallele(int d, double seuil, int iterations, int coeur, const std::string& fichier, bool performanceTest) {
 
     double** u = initialize_matrix(fichier, d);
     double** originalU = initialize_matrix(fichier, d);
@@ -32,7 +32,7 @@ Chrono executerParallele(int d, double seuil, int iterations, int coeur, const s
 
     while (!stopSeuil) {
 
-        #pragma omp parallel
+        //#pragma omp parallel num_threads(2)
         for (int i=1; i < d - 1; i++) {
 
             int oddLineStart = i % 2 == 0 ? 1 : 2;
@@ -44,7 +44,7 @@ Chrono executerParallele(int d, double seuil, int iterations, int coeur, const s
             {
                 u[i][j] = 0.25*(u[i][j-1]+u[i-1][j]+u[i][j+1]+u[i+1][j]);
 
-                if ( u[i][j] <= seuil) // originalU[i][j] -
+                if ( u[i][j] <= seuil)
                 {
                     stopSeuil = true;
                 }
@@ -56,26 +56,34 @@ Chrono executerParallele(int d, double seuil, int iterations, int coeur, const s
             {
                 u[i][j] = 0.25*(u[i][j-1]+u[i-1][j]+u[i][j+1]+u[i+1][j]);
 
-                if (u[i][j]  <= seuil) // originalU[i][j] -
+                if (u[i][j]  <= seuil)
                 {
                     stopSeuil = true;
                 }
             }
         }
 
+        lChrono.pause();
+
         if (iterations != 0 && iterationCount % iterations == 0) {
             print_output(u, d);
         }
+
+        lChrono.resume();
 
         iterationCount++;
     }
 
     lChrono.pause();
 
-    if(coeur == 1) {
+    if (!performanceTest){
         cout << "Temps d'execution parallele = \033[1;31m" << lChrono.get() << " sec\033[0m" << endl;
     }
 
-    return lChrono;
+    if (iterations == 0 && !performanceTest) {
+        cout << "Resultat final parallele\n";
+        print_output(u, d);
+    }
 
+    return lChrono;
 }

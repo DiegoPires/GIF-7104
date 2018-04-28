@@ -57,8 +57,9 @@ int main(int argc, char *argv[]) {
     int coeur = 1;
 
     bool createFile = false;
+    bool performanceTest = false;
 
-    while ((opt = getopt(argc, argv, "d:s:i:c:f:t:h:")) != -1) {
+    while ((opt = getopt(argc, argv, "d:s:i:c:f:t:h:p:")) != -1) {
         switch(opt) {
             case 'd':
                 if(optarg) dimension = atoi(optarg);
@@ -77,6 +78,9 @@ int main(int argc, char *argv[]) {
                 break;
             case 't':
                 if(optarg) createFile = true;
+                break;
+            case 'p':
+                if(optarg) performanceTest = true;
                 break;
             case '?':
                 cout << "\nParametre incorrect";
@@ -106,6 +110,10 @@ int main(int argc, char *argv[]) {
 
     cout << "\n\n";
 
+    if (!performanceTest) {
+        executerSequentiel(dimension, seuil, iterations, coeur, fichier, performanceTest);
+        executerParallele(dimension, seuil, iterations, coeur, fichier, performanceTest);
+    }
     //double tempsTotalParallele = 0;
     //double tempsTotalSequentielle = 0;
 
@@ -115,11 +123,9 @@ int main(int argc, char *argv[]) {
 
     // Si vous voulez generer des fichier avec des noms differents dans le cas de la boucle
 
-    c = executerSequentiel(dimension, seuil, iterations, coeur, fichier);
 
     //tempsTotalSequentielle+= c.get();
 
-    c = executerParallele(dimension, seuil, iterations, coeur, fichier);
     //tempsTotalParallele+= c.get();
     //}
 

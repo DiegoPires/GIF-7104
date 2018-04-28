@@ -15,7 +15,7 @@
 
 using namespace std;
 
-Chrono executerSequentiel(int d, double seuil, int iterations, int coeur, const std::string& fichier) {
+Chrono executerSequentiel(int d, double seuil, int iterations, int coeur, const std::string& fichier, bool performanceTest) {
 
     double** u = initialize_matrix(fichier, d);
     double** originalU = initialize_matrix(fichier, d);
@@ -40,7 +40,7 @@ Chrono executerSequentiel(int d, double seuil, int iterations, int coeur, const 
             {
                 u[i][j] = 0.25*(u[i][j-1]+u[i-1][j]+u[i][j+1]+u[i+1][j]);
 
-                if ( u[i][j]  <= seuil) // originalU[i][j] -
+                if ( u[i][j]  <= seuil)
                 {
                    stopSeuil = true;
                 }
@@ -51,25 +51,34 @@ Chrono executerSequentiel(int d, double seuil, int iterations, int coeur, const 
             {
                 u[i][j] = 0.25*(u[i][j-1]+u[i-1][j]+u[i][j+1]+u[i+1][j]);
 
-                if (u[i][j]  <= seuil) // originalU[i][j] -
+                if (u[i][j]  <= seuil)
                 {
                     stopSeuil = true;
                 }
             }
         }
 
+        lChrono.pause();
         if (iterations != 0 && iterationCount % iterations == 0) {
             print_output(u, d);
         }
+
+        lChrono.resume();
 
         iterationCount++;
     }
 
     lChrono.pause();
 
-    if (coeur == 1){
+    if (!performanceTest) {
         cout << "Temps d'execution séquentiel = \033[1;31m" << lChrono.get() << " sec\033[0m" << endl;
     }
+
+    if (iterations == 0 && !performanceTest) {
+        cout << "Resultat final séquentiel\n";
+        print_output(u, d);
+    }
+
 
     return lChrono;
 }

@@ -26,4 +26,6 @@ main <params>
 -c       how many process to use in the parallelisation
 
 -t       creates a new file with the dimension provided and overwrite the -f parameter with the file created
+
+-p       ignores everything and makes an performance test
 ```
