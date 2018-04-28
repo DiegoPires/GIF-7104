@@ -14,6 +14,8 @@
 
 #include <unistd.h>
 #include <math.h>
+#include <thread>         // std::this_thread::sleep_for
+#include <chrono>
 
 using namespace std;
 
@@ -113,6 +115,9 @@ int main(int argc, char *argv[]) {
         cout << "\n\n";
 
         executerSequentiel(dimension, seuil, iterations, coeur, fichier, performanceTest);
+
+        // std::this_thread::sleep_for (std::chrono::seconds(2));
+
         executerParallele(dimension, seuil, iterations, coeur, fichier, performanceTest);
     }
     else {

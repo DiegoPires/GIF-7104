@@ -20,28 +20,34 @@ using namespace std;
 Chrono executerParallele(int d, double seuil, int iterations, int coeur, const std::string& fichier, bool performanceTest) {
 
     double** u = initialize_matrix(fichier, d);
-    double** originalU = initialize_matrix(fichier, d);
 
-    Chrono lChrono(true);
-
-    double oldData = 0;
-    double newData = 0;
     bool stopSeuil = false;
 
     int iterationCount = 1;
 
-    omp_set_num_threads(coeur);
+    //omp_set_num_threads(coeur);
 
+    int part_rows, th_id;
+    part_rows = d/coeur;
+
+    Chrono lChrono(true);
+
+    //#pragma omp parallel
     while (!stopSeuil) {
 
-        #pragma omp parallel
+        #pragma omp parallel //shared(stopSeuil)
         for (int i=1; i < d - 1; i++) {
 
-            int oddLineStart = i % 2 == 0 ? 1 : 2;
-            int evenLineStart = i % 2 == 0 ? 2 : 1;
+            //#pragma omp barrier
+            //#pragma omp single
+            //{
+                 int oddLineStart = i % 2 == 0 ? 1 : 2;
+                 int evenLineStart = i % 2 == 0 ? 2 : 1;
+            //}
 
             // Red sweep.
-            #pragma omp parallel for shared( d, originalU, stopSeuil, i)
+            //#pragma omp for  //shared( d, originalU, stopSeuil, i)
+            #pragma omp parallel for //schedule(guided,part_rows)
             for (int j = oddLineStart; j < d-1; j+=2)
             {
                 u[i][j] = 0.25*(u[i][j-1]+u[i-1][j]+u[i][j+1]+u[i+1][j]);
@@ -53,7 +59,8 @@ Chrono executerParallele(int d, double seuil, int iterations, int coeur, const s
             }
 
             // Black sweep.
-            #pragma omp parallel for shared(u, d, originalU, stopSeuil, i)
+            //#pragma omp for  //shared(u, d, originalU, stopSeuil, i)
+            #pragma omp parallel for //schedule(guided,part_rows)
             for (int j = evenLineStart; j < d-1; j+=2)
             {
                 u[i][j] = 0.25*(u[i][j-1]+u[i-1][j]+u[i][j+1]+u[i+1][j]);
@@ -68,7 +75,8 @@ Chrono executerParallele(int d, double seuil, int iterations, int coeur, const s
         lChrono.pause();
 
         if (iterations != 0 && iterationCount % iterations == 0) {
-            print_output(u, d);
+            string filename = "src/output/parallel/file_" + std::to_string(iterationCount) + ".bmp";
+            print_output(u, d, &filename[0u]);
         }
 
         lChrono.resume();
@@ -78,13 +86,15 @@ Chrono executerParallele(int d, double seuil, int iterations, int coeur, const s
 
     lChrono.pause();
 
-    if (!performanceTest){
-        cout << "Temps d'execution parallele = \033[1;31m" << lChrono.get() << " sec\033[0m" << endl;
+    if (!performanceTest) {
+        cout << "Temps d'execution parallele  = \033[1;31m" << lChrono.get() << " sec\033[0m" << endl;
     }
 
     if (iterations == 0 && !performanceTest) {
+        string filename = "src/output/parallele/file_0.bmp";
+
         cout << "Resultat final parallele\n";
-        print_output(u, d);
+        print_output(u, d, &filename[0u]);
     }
 
     return lChrono;

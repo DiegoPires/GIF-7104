@@ -18,15 +18,11 @@ using namespace std;
 Chrono executerSequentiel(int d, double seuil, int iterations, int coeur, const std::string& fichier, bool performanceTest) {
 
     double** u = initialize_matrix(fichier, d);
-    double** originalU = initialize_matrix(fichier, d);
+
+    bool stopSeuil = false;
+    int iterationCount = 1;
 
     Chrono lChrono(true);
-
-    double oldData = 0;
-    double newData = 0;
-    bool stopSeuil = false;
-
-    int iterationCount = 1;
 
     while (!stopSeuil) {
 
@@ -60,7 +56,8 @@ Chrono executerSequentiel(int d, double seuil, int iterations, int coeur, const 
 
         lChrono.pause();
         if (iterations != 0 && iterationCount % iterations == 0) {
-            print_output(u, d);
+            string filename = "src/output/sequentiel/file_" + std::to_string(iterationCount) + ".bmp";
+            print_output(u, d, &filename[0u]);
         }
 
         lChrono.resume();
@@ -75,10 +72,11 @@ Chrono executerSequentiel(int d, double seuil, int iterations, int coeur, const 
     }
 
     if (iterations == 0 && !performanceTest) {
-        cout << "Resultat final séquentiel\n";
-        print_output(u, d);
-    }
+        string filename = "src/output/sequentiel/file_0.bmp";
 
+        cout << "Resultat final séquentiel\n";
+        print_output(u, d, &filename[0u]);
+    }
 
     return lChrono;
 }
