@@ -95,6 +95,7 @@ Chrono executerParallele(string iFilename, string iOutFilename, string noyau){
                 //#pragma omp parallel for schedule(dynamic) shared(lImage, lWidth, lHeight)
                 for (int j = -lHalfK; j <= lHalfK; j++) {
                     fy = j + lHalfK;
+                    #pragma omp reduction(+:lR, lG, lB) private(fx)
                     for (int i = -lHalfK; i <= lHalfK; i++) {
                         fx = i + lHalfK;
 

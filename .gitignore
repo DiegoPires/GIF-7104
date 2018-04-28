@@ -36,3 +36,5 @@
 .DS_STORE
 CMakeFiles
 cmake-build-debug
+
+*.zip
