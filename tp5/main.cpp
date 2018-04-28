@@ -13,6 +13,7 @@
 #include "lib/Chrono.hpp"
 
 #include <unistd.h>
+#include <math.h>
 
 using namespace std;
 
@@ -93,7 +94,7 @@ int main(int argc, char *argv[]) {
 
     if (createFile) {
         string fileName = createInitializationFile(dimension);
-        fichier = &fileName[0u];;
+        fichier = &fileName[0u];
     }
 
     if (fichier == "") {
@@ -116,26 +117,39 @@ int main(int argc, char *argv[]) {
     }
     else {
 
+        cout << "**** Test de performance" << endl;
+
+        cout << "Dimension ; Séquentiel ";
+        for (int i=1; i<=10; i++) {
+            cout << " ; Parallele " << i;
+        }
+        cout << endl;
+
+        for (int i=10, j=1; i<=1500; i*=2, j++){
+            dimension = i;
+            string fileName = createInitializationFile(dimension);
+            fichier = &fileName[0u];
+
+            cout << dimension << "x" << dimension << " ; ";
+
+            c = executerSequentiel(dimension, seuil, iterations, coeur, fichier, true);
+
+            double oldTime = c.get();
+            cout << " \033[1;31m" << oldTime << " \033[0m ; ";
+
+            for (int i=1; i<=10; i++) {
+                c = executerSequentiel(dimension, seuil, iterations, coeur, fichier, true);
+                double newTime = c.get();
+                double speedyUp = oldTime / newTime;
+                double efficacity = speedyUp / i;
+                cout << " \033[1;31m" << newTime << " \033[0m ; ";
+
+                // cout << " ; " << speedyUp;
+                // cout << " ; " << efficacity;
+                // cout << endl;
+            }
+
+            cout << endl;
+        }
     }
-    //double tempsTotalParallele = 0;
-    //double tempsTotalSequentielle = 0;
-
-    // La boucle FOR est commenté, parce que ca sers juste pour le test de performance
-    //int iteration = 1;
-    //for(int i = 0; i<iteration; i++) {
-
-    // Si vous voulez generer des fichier avec des noms differents dans le cas de la boucle
-
-
-    //tempsTotalSequentielle+= c.get();
-
-    //tempsTotalParallele+= c.get();
-    //}
-
-    //double tempsMoyenSeq = (tempsTotalSequentielle / iteration);
-    //double tempsMoyenPar = (tempsTotalParallele / iteration);
-
-    //cout << "Temps d'execution séquentiel moyen = \033[1;31m" << tempsMoyenSeq << " sec\033[0m" << endl;
-    //cout << "Temps d'execution parallele moyen  = \033[1;31m" << tempsMoyenPar << " sec\033[0m" << endl;
-
 }
