@@ -15,6 +15,8 @@ main <params>
 ```shell
 -h       help
 
+-d       size of the matrix
+
 -f       path of the initialization matrix - Ex: "src/input/init100.txt"
 
 -d       dimension of the matrix

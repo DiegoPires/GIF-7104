@@ -22,6 +22,7 @@ using namespace std;
 void showHelp(){
     cout << "main <command>\n\n";
     cout << "-h       help\n";
+    cout << "-d       size of the matrix\n";
     cout << "-f       path of the initialization matrix - Ex: 'src/input/init100.txt'\n";
     cout << "-s       threshold indicating when to stop the process\n";
     cout << "-i       between how many iterations we should generate an output\n";
