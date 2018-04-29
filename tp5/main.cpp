@@ -32,17 +32,22 @@ void showHelp(){
 }
 
 string createInitializationFile(int dimension){
+
     string fileName = "src/input/init" + std::to_string(dimension) + ".txt";
-    std::ofstream outfile (fileName);
 
-    for(int i=1; i<dimension-1;i++){
-        for (int j=1; j<dimension-1; j++){
-            double randomValue = rand()%((100 - 20) + 1) + 10;
-            outfile << std::to_string(i) << " " << std::to_string(j) << " " << randomValue << std::endl;
+    if (!( access( fileName.c_str(), F_OK ) != -1 ))
+    {
+        std::ofstream outfile (fileName);
+
+        for(int i=1; i<dimension-1;i++){
+            for (int j=1; j<dimension-1; j++){
+                double randomValue = rand()%((100 - 20) + 1) + 10;
+                outfile << std::to_string(i) << " " << std::to_string(j) << " " << randomValue << std::endl;
+            }
         }
-    }
 
-    outfile.close();
+        outfile.close();
+    }
 
     return fileName;
 }
@@ -100,7 +105,7 @@ int main(int argc, char *argv[]) {
         fichier = &fileName[0u];
     }
 
-    if (fichier == "") {
+    if (fichier == "" && performanceTest == false) {
         cout << "\nParametre -f est obligatoire";
         exit(1);
     }
@@ -131,7 +136,7 @@ int main(int argc, char *argv[]) {
         }
         cout << endl;
 
-        for (int i=10, j=1; i<=1500; i*=2, j++){
+        for (int i=10, j=1; i<=10000; i*=5, j++){
             dimension = i;
             string fileName = createInitializationFile(dimension);
             fichier = &fileName[0u];

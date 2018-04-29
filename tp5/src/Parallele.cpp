@@ -74,7 +74,7 @@ Chrono executerParallele(int d, double seuil, int iterations, int coeur, const s
 
         lChrono.pause();
 
-        if (iterations != 0 && iterationCount % iterations == 0) {
+        if (iterations != 0 && iterationCount % iterations == 0 && !performanceTest) {
             string filename = "src/output/parallel/file_" + std::to_string(iterationCount) + ".bmp";
             print_output(u, d, &filename[0u]);
         }
